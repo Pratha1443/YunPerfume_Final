@@ -1,26 +1,39 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HeroPinned } from "@/components/home/hero-pinned";
+import { ManifestoSection } from "@/components/home/manifesto-section";
+import { HorizontalGallery } from "@/components/home/horizontal-gallery";
+import { StoryParallax } from "@/components/home/story-parallax";
+import { NumbersSection } from "@/components/home/numbers-section";
+import { ClosingCta } from "@/components/home/closing-cta";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "YUN — Slow perfumery from India" },
+      {
+        name: "description",
+        content:
+          "A small-batch perfume house from India. Mogra, oud, sandalwood and chai — fragrances rooted in the materials and rituals of the subcontinent.",
+      },
+      { property: "og:title", content: "YUN — Slow perfumery from India" },
+      {
+        property: "og:description",
+        content: "Small-batch fragrances rooted in Indian materials and rituals.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="bg-background">
+      <HeroPinned />
+      <ManifestoSection />
+      <HorizontalGallery />
+      <StoryParallax />
+      <NumbersSection />
+      <ClosingCta />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
