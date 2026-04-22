@@ -6,6 +6,7 @@ import { AuthProvider } from "@/lib/auth-store";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CartDrawer } from "@/components/cart-drawer";
+import { Preloader } from "@/components/ui/preloader";
 
 export const metadata: Metadata = {
   title: "YUN — Slow perfumery from India",
@@ -21,12 +22,12 @@ export const metadata: Metadata = {
     title: "YUN — Slow perfumery from India",
     description: "Small-batch fragrances rooted in Indian materials and rituals.",
   },
-  themeColor: "#F5F1EA",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#F5F1EA",
 };
 
 export default function RootLayout({
@@ -37,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <Preloader />
         <AuthProvider>
           <CartProvider>
             <SmoothScrollProvider>

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -8,6 +10,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
+  { href: "/atelier", label: "Atelier" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;

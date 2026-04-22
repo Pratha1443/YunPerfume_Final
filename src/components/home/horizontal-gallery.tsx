@@ -1,10 +1,12 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import Image from "next/image";
 import { fragrances } from "@/lib/fragrances";
-import { formatINR } from "@/lib/cart-store";
+import { formatINR } from "@/lib/utils";
 
 export function HorizontalGallery() {
   const sectionRef = useRef<HTMLDivElement>(null);

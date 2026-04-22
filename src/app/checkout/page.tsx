@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useCart, formatINR } from "@/lib/cart-store";
+import { useCart } from "@/lib/cart-store";
+import { formatINR } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-store";
 import Image from "next/image";
 

@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { findFragrance, fragrances } from "@/lib/fragrances";
-import { formatINR, useCart } from "@/lib/cart-store";
+import { useCart } from "@/lib/cart-store";
+import { formatINR } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

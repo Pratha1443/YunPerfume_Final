@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { fragrances } from "@/lib/fragrances";
-import { formatINR } from "@/lib/cart-store";
+import { useCart } from "@/lib/cart-store";
+import { formatINR } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Shop — YUN Atelier",

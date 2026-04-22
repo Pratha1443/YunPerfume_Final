@@ -1,9 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { X, Minus, Plus } from "lucide-react";
-import { useCart, formatINR, type CartItem } from "@/lib/cart-store";
+import { useCart, type CartItem } from "@/lib/cart-store";
+import { formatINR, cn } from "@/lib/utils";
 import { useEffect } from "react";
-import { cn } from "@/lib/utils";
 
 export function CartDrawer() {
   const { items, isOpen, setOpen, setQty, remove, subtotal } = useCart();

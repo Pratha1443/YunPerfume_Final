@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import type { StaticImageData } from "next/image";
@@ -102,10 +104,3 @@ export function useCart() {
   if (!ctx) throw new Error("useCart must be used within CartProvider");
   return ctx;
 }
-
-export const formatINR = (n: number) =>
-  new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(n);
