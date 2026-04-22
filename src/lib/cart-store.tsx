@@ -1,11 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
+import type { StaticImageData } from "next/image";
+
 export interface CartItem {
   id: string;
   name: string;
   price: number; // in INR
   size: string;
-  image: string;
+  image: string | StaticImageData;
   quantity: number;
 }
 

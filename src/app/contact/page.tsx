@@ -1,19 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+"use client";
+
 import { useState } from "react";
 
-export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — YUN Atelier" },
-      { name: "description", content: "Write to YUN. We answer every message ourselves, usually within two working days." },
-      { property: "og:title", content: "Contact — YUN Atelier" },
-      { property: "og:description", content: "Write to YUN. We answer every message ourselves." },
-    ],
-  }),
-  component: Contact,
-});
-
-function Contact() {
+export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
 
   return (

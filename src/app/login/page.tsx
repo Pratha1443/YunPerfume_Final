@@ -1,20 +1,13 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/lib/auth-store";
 
-export const Route = createFileRoute("/login")({
-  head: () => ({
-    meta: [
-      { title: "Sign in — YUN" },
-      { name: "description", content: "Sign in to your YUN account with a magic link." },
-    ],
-  }),
-  component: Login,
-});
-
-function Login() {
+export default function Login() {
   const { user, sendMagicLink, verify, signOut } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [stage, setStage] = useState<"email" | "code">("email");
@@ -35,7 +28,7 @@ function Login() {
             Signed in as <span className="text-foreground">{user.email}</span>
           </p>
           <div className="mt-10 flex flex-col gap-3">
-            <Link to="/shop" className="bg-foreground py-4 text-sm tracking-wider text-background hover:bg-accent">
+            <Link href="/shop" className="bg-foreground py-4 text-sm tracking-wider text-background hover:bg-accent text-center">
               CONTINUE SHOPPING
             </Link>
             <button onClick={signOut} className="eyebrow py-2 text-muted-foreground hover:text-foreground">
@@ -109,7 +102,7 @@ function Login() {
               e.preventDefault();
               setError("");
               if (verify(email, code)) {
-                navigate({ to: "/shop" });
+                router.push("/shop");
               } else {
                 setError("Invalid code. Please try again.");
               }

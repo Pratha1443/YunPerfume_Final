@@ -1,39 +1,15 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+"use client";
+
+import { use, useState } from "react";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 import { findFragrance, fragrances } from "@/lib/fragrances";
 import { formatINR, useCart } from "@/lib/cart-store";
-import { useState } from "react";
 
-export const Route = createFileRoute("/shop/$slug")({
-  loader: ({ params }) => {
-    const fragrance = findFragrance(params.slug);
-    if (!fragrance) throw notFound();
-    return { fragrance };
-  },
-  head: ({ loaderData }) => {
-    const f = loaderData?.fragrance;
-    return {
-      meta: [
-        { title: f ? `${f.name} — YUN` : "Fragrance — YUN" },
-        { name: "description", content: f?.tagline ?? "A YUN fragrance." },
-        { property: "og:title", content: f ? `${f.name} — YUN` : "Fragrance" },
-        { property: "og:description", content: f?.tagline ?? "" },
-        ...(f?.image ? [{ property: "og:image", content: f.image }] : []),
-      ],
-    };
-  },
-  notFoundComponent: () => (
-    <div className="flex min-h-screen items-center justify-center px-5">
-      <div className="text-center">
-        <div className="font-display text-6xl font-light">Not in stock</div>
-        <p className="mt-3 text-muted-foreground">This fragrance is no longer in our atelier.</p>
-        <Link to="/shop" className="eyebrow mt-6 inline-block border-b border-foreground pb-1">
-          See the collection →
-        </Link>
-      </div>
-    </div>
-  ),
-  component: Product,
-});
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
 const SIZES = [
   { label: "10 ml", multiplier: 0.35 },
@@ -41,8 +17,14 @@ const SIZES = [
   { label: "100 ml", multiplier: 1.75 },
 ];
 
-function Product() {
-  const { fragrance } = Route.useLoaderData();
+export default function ProductPage({ params }: PageProps) {
+  const { slug } = use(params);
+  const fragrance = findFragrance(slug);
+
+  if (!fragrance) {
+    notFound();
+  }
+
   const { add } = useCart();
   const [size, setSize] = useState(SIZES[1]);
   const price = Math.round(fragrance.price * size.multiplier);
@@ -52,7 +34,7 @@ function Product() {
   return (
     <div className="bg-background pt-24 md:pt-32">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-        <Link to="/shop" className="eyebrow text-muted-foreground hover:text-foreground">
+        <Link href="/shop" className="eyebrow text-muted-foreground hover:text-foreground">
           ← All fragrances
         </Link>
 
@@ -60,7 +42,13 @@ function Product() {
           <div className="relative">
             <div className="sticky top-28">
               <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-                <img src={fragrance.image} alt={fragrance.name} className="h-full w-full object-cover" />
+                <Image
+                  src={fragrance.image}
+                  alt={fragrance.name}
+                  fill
+                  className="object-cover"
+                  priority
+                />
                 <div className="absolute left-5 top-5 font-mono text-xs text-foreground/60">
                   N°{fragrance.index}
                 </div>
@@ -149,16 +137,15 @@ function Product() {
             {others.map((o) => (
               <Link
                 key={o.id}
-                to="/shop/$slug"
-                params={{ slug: o.slug }}
+                href={`/shop/${o.slug}`}
                 className="group block"
               >
-                <div className="aspect-[4/5] overflow-hidden bg-muted">
-                  <img
+                <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+                  <Image
                     src={o.image}
                     alt={o.name}
-                    className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-                    loading="lazy"
+                    fill
+                    className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
                   />
                 </div>
                 <div className="mt-4 flex items-end justify-between">

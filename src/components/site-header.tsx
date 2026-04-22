@@ -1,19 +1,20 @@
-import { Link, useRouter } from "@tanstack/react-router";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ShoppingBag, User2, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/shop", label: "Shop" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/shop", label: "Shop" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 export function SiteHeader() {
   const { count, setOpen } = useCart();
-  const router = useRouter();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -25,9 +26,8 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    const unsub = router.subscribe("onBeforeNavigate", () => setMobileOpen(false));
-    return unsub;
-  }, [router]);
+    setMobileOpen(false);
+  }, [pathname]);
 
   return (
     <header
@@ -39,18 +39,19 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 md:h-20 md:px-10">
-        <Link to="/" className="font-display text-2xl font-light tracking-[0.2em] md:text-3xl">
+        <Link href="/" className="font-display text-2xl font-light tracking-[0.2em] md:text-3xl">
           YUN
         </Link>
 
         <nav className="hidden items-center gap-10 md:flex">
           {NAV.map((item) => (
             <Link
-              key={item.to}
-              to={item.to}
-              className="eyebrow text-foreground/70 transition-colors hover:text-foreground"
-              activeProps={{ className: "text-foreground" }}
-              activeOptions={{ exact: true }}
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "eyebrow transition-colors hover:text-foreground",
+                pathname === item.href ? "text-foreground" : "text-foreground/70"
+              )}
             >
               {item.label}
             </Link>
@@ -59,7 +60,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2 md:gap-4">
           <Link
-            to="/login"
+            href="/login"
             aria-label="Account"
             className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-foreground/5"
           >
@@ -94,8 +95,8 @@ export function SiteHeader() {
           <nav className="flex flex-col gap-1 border-t border-border/60 bg-background/95 px-5 py-6 backdrop-blur-md">
             {NAV.map((item) => (
               <Link
-                key={item.to}
-                to={item.to}
+                key={item.href}
+                href={item.href}
                 className="font-display py-3 text-3xl font-light"
               >
                 {item.label}
@@ -107,3 +108,4 @@ export function SiteHeader() {
     </header>
   );
 }
+

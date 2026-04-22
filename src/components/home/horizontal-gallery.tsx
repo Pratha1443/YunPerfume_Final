@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
+import Image from "next/image";
 import { fragrances } from "@/lib/fragrances";
 import { formatINR } from "@/lib/cart-store";
 
@@ -52,18 +53,15 @@ export function HorizontalGallery() {
         {fragrances.map((f) => (
           <Link
             key={f.id}
-            to="/shop/$slug"
-            params={{ slug: f.slug }}
+            href={`/shop/${f.slug}`}
             className="group relative block h-[68vh] w-[70vw] flex-none md:w-[42vw] lg:w-[34vw]"
           >
             <div className="relative h-full w-full overflow-hidden bg-ivory/5">
-              <img
+              <Image
                 src={f.image}
                 alt={f.name}
-                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
-                loading="lazy"
-                width={1024}
-                height={1280}
+                fill
+                className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
               />
               <div className="absolute left-5 top-5 font-mono text-xs text-ivory/70">N°{f.index}</div>
               <div className="absolute inset-x-5 bottom-5 flex items-end justify-between">
@@ -86,7 +84,7 @@ export function HorizontalGallery() {
               All four fragrances in 2ml vials. A patient introduction to the house of YUN.
             </p>
             <Link
-              to="/shop"
+              href="/shop"
               className="eyebrow mt-8 inline-block border-b border-ivory pb-1 hover:text-accent"
             >
               Visit the shop →
@@ -97,3 +95,4 @@ export function HorizontalGallery() {
     </section>
   );
 }
+

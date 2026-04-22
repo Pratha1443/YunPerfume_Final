@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -39,7 +39,7 @@ export function ClosingCta() {
           with a personal note from the atelier.
         </p>
         <Link
-          to="/shop"
+          href="/shop"
           className="mt-12 inline-flex items-center justify-center bg-foreground px-12 py-5 text-sm tracking-wider text-background transition-colors hover:bg-accent"
         >
           SHOP THE COLLECTION
@@ -48,3 +48,4 @@ export function ClosingCta() {
     </section>
   );
 }
+

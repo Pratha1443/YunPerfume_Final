@@ -1,6 +1,7 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
+import Image from "next/image";
 import { X, Minus, Plus } from "lucide-react";
-import { useCart, formatINR } from "@/lib/cart-store";
+import { useCart, formatINR, type CartItem } from "@/lib/cart-store";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 
@@ -48,7 +49,7 @@ export function CartDrawer() {
                 Begin with a single fragrance, or our discovery set.
               </p>
               <Link
-                to="/shop"
+                href="/shop"
                 onClick={() => setOpen(false)}
                 className="eyebrow mt-8 border-b border-foreground pb-1"
               >
@@ -59,11 +60,14 @@ export function CartDrawer() {
             <ul className="divide-y divide-border/60">
               {items.map((item) => (
                 <li key={item.id} className="flex gap-4 px-6 py-5">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-24 w-20 flex-none object-cover"
-                  />
+                  <div className="relative h-24 w-20 flex-none overflow-hidden bg-muted">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="flex flex-1 flex-col">
                     <div className="flex items-start justify-between gap-3">
                       <div>
@@ -114,7 +118,7 @@ export function CartDrawer() {
               Shipping & taxes calculated at checkout · Free shipping over ₹3,000
             </div>
             <Link
-              to="/checkout"
+              href="/checkout"
               onClick={() => setOpen(false)}
               className="mt-5 flex w-full items-center justify-center bg-foreground py-4 text-sm tracking-wider text-background transition-colors hover:bg-accent"
             >
@@ -126,3 +130,4 @@ export function CartDrawer() {
     </>
   );
 }
+

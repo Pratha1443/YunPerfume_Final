@@ -1,22 +1,14 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+"use client";
+
 import { useState } from "react";
+import Link from "next/link";
 import { useCart, formatINR } from "@/lib/cart-store";
 import { useAuth } from "@/lib/auth-store";
+import Image from "next/image";
 
-export const Route = createFileRoute("/checkout")({
-  head: () => ({
-    meta: [
-      { title: "Checkout — YUN" },
-      { name: "description", content: "Complete your YUN order." },
-    ],
-  }),
-  component: Checkout,
-});
-
-function Checkout() {
+export default function Checkout() {
   const { items, subtotal, clear } = useCart();
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [processing, setProcessing] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -33,7 +25,7 @@ function Checkout() {
             A confirmation has been sent to your email. Your order will be hand-packed and
             dispatched within two working days from our Bengaluru atelier.
           </p>
-          <Link to="/shop" className="eyebrow mt-10 inline-block border-b border-foreground pb-1">
+          <Link href="/shop" className="eyebrow mt-10 inline-block border-b border-foreground pb-1">
             Continue browsing →
           </Link>
         </div>
@@ -46,7 +38,7 @@ function Checkout() {
       <div className="bg-background pt-32 pb-32 md:pt-40">
         <div className="mx-auto max-w-md px-5 text-center">
           <h1 className="h-display text-4xl font-light md:text-5xl">Your bag is empty</h1>
-          <Link to="/shop" className="eyebrow mt-8 inline-block border-b border-foreground pb-1">
+          <Link href="/shop" className="eyebrow mt-8 inline-block border-b border-foreground pb-1">
             Browse fragrances →
           </Link>
         </div>
@@ -72,7 +64,6 @@ function Checkout() {
             e.preventDefault();
             setProcessing(true);
             // Razorpay integration placeholder
-            // In production: create order via server function -> open Razorpay checkout
             await new Promise((r) => setTimeout(r, 1400));
             clear();
             setDone(true);
@@ -85,7 +76,7 @@ function Checkout() {
             <Section title="Contact">
               {!user && (
                 <p className="mb-4 text-sm text-muted-foreground">
-                  Have an account? <Link to="/login" className="text-foreground underline">Sign in</Link>
+                  Have an account? <Link href="/login" className="text-foreground underline">Sign in</Link>
                 </p>
               )}
               <Field label="Email" name="email" type="email" defaultValue={user?.email} required />
@@ -133,7 +124,14 @@ function Checkout() {
               <ul className="mt-6 divide-y divide-border/60">
                 {items.map((item) => (
                   <li key={item.id} className="flex gap-4 py-4">
-                    <img src={item.image} alt={item.name} className="h-20 w-16 flex-none object-cover" />
+                    <div className="relative h-20 w-16 flex-none overflow-hidden bg-muted">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="flex flex-1 flex-col">
                       <div className="font-display text-lg font-light">{item.name}</div>
                       <div className="mt-1 text-xs text-muted-foreground">

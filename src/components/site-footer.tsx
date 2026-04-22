@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 
 export function SiteFooter() {
   return (
@@ -16,18 +16,18 @@ export function SiteFooter() {
           <div className="md:col-span-2">
             <div className="eyebrow mb-5 text-muted-foreground">Shop</div>
             <ul className="space-y-3 text-sm">
-              <li><Link to="/shop" className="hover:text-accent">All fragrances</Link></li>
-              <li><Link to="/shop" className="hover:text-accent">Discovery set</Link></li>
-              <li><Link to="/shop" className="hover:text-accent">Gift cards</Link></li>
+              <li><Link href="/shop" className="hover:text-accent">All fragrances</Link></li>
+              <li><Link href="/shop" className="hover:text-accent">Discovery set</Link></li>
+              <li><Link href="/shop" className="hover:text-accent">Gift cards</Link></li>
             </ul>
           </div>
 
           <div className="md:col-span-2">
             <div className="eyebrow mb-5 text-muted-foreground">House</div>
             <ul className="space-y-3 text-sm">
-              <li><Link to="/about" className="hover:text-accent">Our story</Link></li>
-              <li><Link to="/contact" className="hover:text-accent">Contact</Link></li>
-              <li><Link to="/login" className="hover:text-accent">Account</Link></li>
+              <li><Link href="/about" className="hover:text-accent">Our story</Link></li>
+              <li><Link href="/contact" className="hover:text-accent">Contact</Link></li>
+              <li><Link href="/login" className="hover:text-accent">Account</Link></li>
             </ul>
           </div>
 
@@ -64,3 +64,4 @@ export function SiteFooter() {
     </footer>
   );
 }
+

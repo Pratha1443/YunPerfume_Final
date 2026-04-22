@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import heroBottle from "@/assets/yun-bottle-hero.jpg";
 
 export function HeroPinned() {
@@ -52,12 +53,11 @@ export function HeroPinned() {
         className="absolute inset-0 flex items-center justify-end pr-[6%] md:pr-[10%]"
         style={{ willChange: "transform" }}
       >
-        <img
+        <Image
           src={heroBottle}
           alt="YUN signature perfume bottle"
           className="h-[78%] w-auto object-contain md:h-[88%]"
-          width={1080}
-          height={1920}
+          priority
         />
       </div>
 

@@ -1,20 +1,19 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
 import { fragrances } from "@/lib/fragrances";
 import { formatINR } from "@/lib/cart-store";
 
-export const Route = createFileRoute("/shop")({
-  head: () => ({
-    meta: [
-      { title: "Shop — YUN Atelier" },
-      { name: "description", content: "Explore the four signature fragrances of YUN. Mogra, oud, sandalwood and chai. Crafted in small batches in India." },
-      { property: "og:title", content: "Shop — YUN Atelier" },
-      { property: "og:description", content: "Four signature fragrances from the YUN atelier." },
-    ],
-  }),
-  component: Shop,
-});
+export const metadata: Metadata = {
+  title: "Shop — YUN Atelier",
+  description: "Explore the four signature fragrances of YUN. Mogra, oud, sandalwood and chai. Crafted in small batches in India.",
+  openGraph: {
+    title: "Shop — YUN Atelier",
+    description: "Four signature fragrances from the YUN atelier.",
+  },
+};
 
-function Shop() {
+export default function Shop() {
   return (
     <div className="bg-background pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
@@ -37,20 +36,17 @@ function Shop() {
           {fragrances.map((f, i) => (
             <Link
               key={f.id}
-              to="/shop/$slug"
-              params={{ slug: f.slug }}
+              href={`/shop/${f.slug}`}
               className={`group block ${i % 2 === 1 ? "md:mt-32" : ""}`}
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-                <img
+                <Image
                   src={f.image}
                   alt={f.name}
-                  className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
-                  loading="lazy"
-                  width={1024}
-                  height={1280}
+                  fill
+                  className="object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
                 />
-                <div className="absolute left-5 top-5 font-mono text-xs text-foreground/60 mix-blend-difference text-ivory">
+                <div className="absolute left-5 top-5 font-mono text-xs mix-blend-difference text-white">
                   N°{f.index}
                 </div>
               </div>

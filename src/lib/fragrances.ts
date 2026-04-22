@@ -1,3 +1,4 @@
+import type { StaticImageData } from "next/image";
 import mogra from "@/assets/fragrance-mogra.jpg";
 import oud from "@/assets/fragrance-oud.jpg";
 import sandal from "@/assets/fragrance-sandal.jpg";
@@ -12,7 +13,7 @@ export interface Fragrance {
   notes: { top: string[]; heart: string[]; base: string[] };
   story: string;
   price: number; // INR for 50ml
-  image: string;
+  image: StaticImageData;
   index: string; // 01, 02 etc
   hue: string; // for accent treatments
 }

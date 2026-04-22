@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import botanicals from "@/assets/story-botanicals.jpg";
@@ -49,13 +50,14 @@ export function StoryParallax() {
     <section ref={ref} className="relative bg-ivory py-[18vh]">
       <div className="mx-auto grid max-w-[1400px] gap-16 px-5 md:grid-cols-12 md:gap-12 md:px-10">
         <div className="md:col-span-5 md:pt-[20vh]">
-          <div className="overflow-hidden">
-            <div data-parallax="0.4" className="relative aspect-[3/4] w-full overflow-hidden">
-              <img
+          <div className="relative aspect-[3/4] w-full overflow-hidden">
+            <div data-parallax="0.4" className="absolute -top-[20%] left-0 h-[140%] w-full">
+              <Image
                 src={botanicals}
                 alt="Marigold and jasmine on silk"
-                className="absolute inset-0 h-[120%] w-full object-cover"
-                loading="lazy"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 40vw"
               />
             </div>
           </div>
@@ -84,13 +86,16 @@ export function StoryParallax() {
           </div>
 
           <div className="mt-16 overflow-hidden md:mt-24">
-            <div data-parallax="0.3" className="relative aspect-[16/9] w-full overflow-hidden">
-              <img
-                src={craft}
-                alt="Hands of a perfumer pouring oil"
-                className="absolute inset-0 h-[120%] w-full object-cover"
-                loading="lazy"
-              />
+            <div className="relative aspect-[16/9] w-full overflow-hidden">
+              <div data-parallax="0.3" className="absolute -top-[15%] left-0 h-[130%] w-full">
+                <Image
+                  src={craft}
+                  alt="Hands of a perfumer pouring oil"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                />
+              </div>
             </div>
           </div>
         </div>
