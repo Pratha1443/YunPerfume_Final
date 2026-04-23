@@ -57,9 +57,9 @@ export function SiteFooter() {
         <div className="mt-20 flex flex-col items-start justify-between gap-4 border-t border-border/60 pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
           <div>© {new Date().getFullYear()} YUN Atelier · Made in India</div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground">Privacy</a>
-            <a href="#" className="hover:text-foreground">Terms</a>
-            <a href="#" className="hover:text-foreground">Shipping</a>
+            <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
+            <Link href="/terms" className="hover:text-foreground">Terms</Link>
+            <Link href="/shipping" className="hover:text-foreground">Shipping</Link>
           </div>
         </div>
       </div>

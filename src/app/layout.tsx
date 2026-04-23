@@ -6,6 +6,7 @@ import { AuthProvider } from "@/lib/auth-store";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CartDrawer } from "@/components/cart-drawer";
+import { Preloader } from "@/components/ui/preloader";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
@@ -45,6 +46,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <Preloader />
           <AuthProvider>
             <CartProvider>
               <SmoothScrollProvider>
