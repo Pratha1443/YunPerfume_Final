@@ -18,7 +18,7 @@ export default function Login() {
 
   if (user) {
     return (
-      <div className="bg-background pt-32 pb-32 md:pt-40">
+      <div className="bg-transparent pt-32 pb-32 md:pt-40">
         <div className="mx-auto max-w-md px-5 text-center">
           <div className="eyebrow text-muted-foreground">Welcome back</div>
           <h1 className="h-display mt-4 text-5xl font-light md:text-6xl">
@@ -41,7 +41,7 @@ export default function Login() {
   }
 
   return (
-    <div className="bg-background pt-32 pb-32 md:pt-40">
+    <div className="bg-transparent pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-md px-5">
         <div className="text-center">
           <div className="font-display text-5xl font-light tracking-[0.2em]">YUN</div>

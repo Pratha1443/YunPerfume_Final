@@ -41,7 +41,7 @@ const NUMBERS = [
 
 export default function About() {
   return (
-    <div className="bg-background pt-32 pb-32 md:pt-40">
+    <div className="bg-transparent pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         {/* Intro */}
         <div className="grid gap-12 md:grid-cols-12 md:gap-16">

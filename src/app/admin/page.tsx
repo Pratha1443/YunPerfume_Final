@@ -31,7 +31,7 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="grid gap-12 md:grid-cols-2">
-        <section className="rounded-sm border border-border/60 bg-white p-8">
+        <section className="rounded-sm border border-border/60 bg-card p-8">
           <h2 className="font-display text-2xl font-light mb-6">Quick Actions</h2>
           <div className="flex flex-wrap gap-4">
             <Link 
@@ -49,7 +49,7 @@ export default async function AdminDashboard() {
           </div>
         </section>
 
-        <section className="rounded-sm border border-border/60 bg-white p-8">
+        <section className="rounded-sm border border-border/60 bg-card p-8">
           <h2 className="font-display text-2xl font-light mb-6">System Status</h2>
           <div className="space-y-4 text-sm">
             <div className="flex justify-between border-b pb-2">
@@ -69,7 +69,7 @@ export default async function AdminDashboard() {
 
 function StatCard({ label, value, href }: { label: string; value: string; href: string }) {
   return (
-    <Link href={href} className="group block rounded-sm border border-border/60 bg-white p-8 transition-all hover:border-accent">
+    <Link href={href} className="group block rounded-sm border border-border/60 bg-card p-8 transition-all hover:border-accent">
       <div className="eyebrow text-muted-foreground group-hover:text-accent transition-colors">{label}</div>
       <div className="mt-4 font-display text-5xl font-light">{value}</div>
     </Link>

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function Shop() {
   return (
-    <div className="bg-background pt-32 pb-32 md:pt-40">
+    <div className="bg-transparent pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="mb-16 flex items-end justify-between">
           <div>

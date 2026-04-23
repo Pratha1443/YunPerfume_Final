@@ -18,7 +18,7 @@ export default function Checkout() {
 
   if (done) {
     return (
-      <div className="bg-background pt-32 pb-32 md:pt-40">
+      <div className="bg-transparent pt-32 pb-32 md:pt-40">
         <div className="mx-auto max-w-md px-5 text-center">
           <div className="eyebrow text-accent">Order received</div>
           <h1 className="h-display mt-4 text-5xl font-light md:text-6xl">Thank you.</h1>
@@ -36,7 +36,7 @@ export default function Checkout() {
 
   if (items.length === 0) {
     return (
-      <div className="bg-background pt-32 pb-32 md:pt-40">
+      <div className="bg-transparent pt-32 pb-32 md:pt-40">
         <div className="mx-auto max-w-md px-5 text-center">
           <h1 className="h-display text-4xl font-light md:text-5xl">Your bag is empty</h1>
           <Link href="/shop" className="eyebrow mt-8 inline-block border-b border-foreground pb-1">
@@ -48,7 +48,7 @@ export default function Checkout() {
   }
 
   return (
-    <div className="bg-background pt-32 pb-32 md:pt-40">
+    <div className="bg-transparent pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="mb-12">
           <div className="flex items-center gap-4">

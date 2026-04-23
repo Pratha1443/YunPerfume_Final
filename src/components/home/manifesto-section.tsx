@@ -30,7 +30,7 @@ export function ManifestoSection() {
   }, []);
 
   return (
-    <section ref={ref} className="bg-ivory py-[20vh] md:py-[26vh]">
+    <section ref={ref} className="bg-transparent pt-[10vh] pb-[20vh] md:pt-[12vh] md:pb-[26vh]">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="mb-12 flex items-center gap-4">
           <span className="block h-px w-12 bg-foreground/40" />

@@ -49,7 +49,7 @@ export function StoryParallax() {
   }, []);
 
   return (
-    <section ref={ref} className="relative bg-ivory py-[18vh]">
+    <section ref={ref} className="relative bg-transparent py-[18vh]">
       <div className="mx-auto grid max-w-[1400px] gap-16 px-5 md:grid-cols-12 md:gap-12 md:px-10">
         <div className="md:col-span-5 md:pt-[20vh]">
           <div className="relative aspect-[3/4] w-full overflow-hidden">

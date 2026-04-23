@@ -7,7 +7,7 @@ import { ClosingCta } from "@/components/home/closing-cta";
 
 export default function Home() {
   return (
-    <div className="bg-background">
+    <div className="bg-transparent">
       <HeroPinned />
       <ManifestoSection />
       <HorizontalGallery />

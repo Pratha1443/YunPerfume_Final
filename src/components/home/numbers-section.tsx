@@ -43,7 +43,7 @@ export function NumbersSection() {
     <section className="bg-ink py-[14vh] text-ivory">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="mb-16 flex items-center gap-4">
-          <span className="block h-px w-12 bg-ivory/40" />
+          <span className="block h-px w-12 bg-transparent/40" />
           <span className="eyebrow text-ivory/60">By the numbers</span>
         </div>
         <div className="grid grid-cols-2 gap-y-12 md:grid-cols-4 md:gap-y-0">

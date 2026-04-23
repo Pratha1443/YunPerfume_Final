@@ -17,7 +17,7 @@ export default function OrderSuccess() {
   if (!hydrated) return null;
 
   return (
-    <div className="bg-ivory noise min-h-screen pt-32 pb-32 md:pt-40">
+    <div className="bg-transparent noise min-h-screen pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-md px-5 text-center">
         <div className="flex justify-center mb-8">
           <CheckCircle2 className="h-20 w-20 text-accent stroke-[1px]" />

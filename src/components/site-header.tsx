@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ShoppingBag, User2, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 import { cn } from "@/lib/utils";
+import logo from "../../Images/YunLogo.png";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -41,9 +43,15 @@ export function SiteHeader() {
           : "bg-transparent border-b border-transparent",
       )}
     >
-      <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 md:h-20 md:px-10">
-        <Link href="/" className="font-display text-2xl font-light tracking-[0.2em] md:text-3xl">
-          YUN
+      <div className="mx-auto flex h-20 max-w-[1400px] items-center justify-between px-5 md:h-24 md:px-10">
+        <Link href="/" className="relative h-12 w-36 md:h-16 md:w-48 transition-opacity hover:opacity-80">
+          <Image
+            src={logo}
+            alt="YUN Atelier"
+            fill
+            className="object-contain object-left"
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-10 md:flex">
@@ -61,8 +69,8 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 md:gap-4">
-          <Link
+        <div className="flex items-center gap-1 md:gap-2">
+                    <Link
             href="/login"
             aria-label="Account"
             className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-foreground/5"
@@ -111,4 +119,3 @@ export function SiteHeader() {
     </header>
   );
 }
-

@@ -21,7 +21,7 @@ export default async function ProfilePage() {
   });
 
   return (
-    <div className="bg-ivory noise min-h-screen pt-32 pb-32 md:pt-40">
+    <div className="bg-transparent noise min-h-screen pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="flex flex-col gap-12 md:flex-row">
           {/* Sidebar */}
@@ -54,14 +54,14 @@ export default async function ProfilePage() {
              <h2 className="eyebrow text-muted-foreground mb-10">Order History</h2>
              
              {!user?.orders || user.orders.length === 0 ? (
-               <div className="rounded-sm border border-border/40 bg-white/50 p-12 text-center">
+               <div className="rounded-sm border border-border/40 bg-card/50 p-12 text-center">
                  <p className="text-muted-foreground">You haven't placed any orders yet.</p>
                  <Link href="/shop" className="inline-block mt-6 eyebrow text-accent hover:underline">Start Exploring →</Link>
                </div>
              ) : (
                <div className="space-y-6">
                  {user.orders.map((order) => (
-                   <div key={order.id} className="rounded-sm border border-border/60 bg-white p-6 md:p-10">
+                   <div key={order.id} className="rounded-sm border border-border/60 bg-card p-6 md:p-10">
                      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border/40 pb-6 mb-6">
                         <div>
                           <div className="font-mono text-xs text-muted-foreground mb-1 uppercase">Order ID</div>

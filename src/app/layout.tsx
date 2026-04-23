@@ -6,7 +6,7 @@ import { AuthProvider } from "@/lib/auth-store";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CartDrawer } from "@/components/cart-drawer";
-import { Preloader } from "@/components/ui/preloader";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "YUN — Slow perfumery from India",
@@ -36,21 +36,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased">
-        <Preloader />
-        <AuthProvider>
-          <CartProvider>
-            <SmoothScrollProvider>
-              <SiteHeader />
-              <main className="min-h-screen">
-                {children}
-              </main>
-              <SiteFooter />
-              <CartDrawer />
-            </SmoothScrollProvider>
-          </CartProvider>
-        </AuthProvider>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className="antialiased bg-transparent">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          forcedTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <CartProvider>
+              <SmoothScrollProvider>
+                <div className="relative flex min-h-screen flex-col bg-transparent">
+                  <SiteHeader />
+                  <main className="flex-1 bg-transparent">
+                    {children}
+                  </main>
+                  <SiteFooter />
+                </div>
+                <CartDrawer />
+              </SmoothScrollProvider>
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

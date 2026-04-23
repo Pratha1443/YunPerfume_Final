@@ -29,7 +29,7 @@ export function ClosingCta() {
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[90vh] items-center justify-center overflow-hidden bg-ivory noise py-[14vh]"
+      className="relative flex min-h-[90vh] items-center justify-center overflow-hidden bg-transparent noise py-[14vh]"
     >
       <div className="mx-auto max-w-[1400px] px-5 text-center md:px-10">
         <h2 className="h-display text-[16vw] leading-[0.9] md:text-[12vw] lg:text-[200px]">

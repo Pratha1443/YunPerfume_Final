@@ -6,7 +6,7 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="bg-background pt-32 pb-32 md:pt-40">
+    <div className="bg-transparent pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="grid gap-16 md:grid-cols-12 md:gap-20">
           <div className="md:col-span-5">

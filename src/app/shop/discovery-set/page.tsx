@@ -5,7 +5,7 @@ import discoveryImage from "@/assets/story-botanicals.jpg"; // Placeholder for a
 
 export default function DiscoverySet() {
   return (
-    <div className="bg-background">
+    <div className="bg-transparent">
       <section className="relative h-[80vh] w-full overflow-hidden flex items-center justify-center bg-sand/30">
         <Image 
           src={discoveryImage} 
@@ -63,12 +63,12 @@ export default function DiscoverySet() {
         </div>
       </section>
 
-      <section className="bg-ivory py-24 border-t border-border/60">
+      <section className="bg-transparent py-24 border-t border-border/60">
         <div className="mx-auto max-w-[1400px] px-5 md:px-10 text-center">
           <div className="eyebrow mb-12">Inside the kit</div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {["01 Mogra Noir", "02 Oud Vārā", "03 Sandal Velvet", "04 Chai Atelier"].map(name => (
-              <div key={name} className="py-8 border border-border/40 bg-white/50">
+              <div key={name} className="py-8 border border-border/40 bg-card/50">
                 <div className="font-mono text-xs text-accent mb-2">2ML SPRAY</div>
                 <div className="font-display text-xl">{name}</div>
               </div>
