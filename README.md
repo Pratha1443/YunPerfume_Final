@@ -8,7 +8,7 @@ The website provides a cinematic, scroll-driven experience that introduces users
 
 ## 🌿 The Vision
 
-YUN was born as an antithesis to fast perfumery. Every fragrance in the collection takes between four and eighteen months to compose, using materials sourced directly from growers across the Indian subcontinent. The digital experience aims to translate this tactile, slow-paced luxury into a fluid, immersive interface.
+YUN was born in 2026 as an antithesis to fast perfumery. Every fragrance in the collection takes between four and eighteen months to compose, using materials sourced directly from growers across the Indian subcontinent. The digital experience aims to translate this tactile, slow-paced luxury into a fluid, immersive interface.
 
 ## 🛠 Tech Stack
 
@@ -23,11 +23,11 @@ YUN was born as an antithesis to fast perfumery. Every fragrance in the collecti
 
 ## ✨ Key Features
 
-### 1. Cinematic Scroll Experience
-Utilizes **GSAP ScrollTrigger** and **Lenis** to create a butter-smooth, parallax-heavy landing page. The horizontal gallery and pinned hero sections create an editorial feel that guides the user through the brand story.
+### 1. "Deep Night" Cinematic Experience
+Utilizes **GSAP ScrollTrigger** and **Lenis** to create a butter-smooth, parallax-heavy landing page. The site features a custom atmospheric background system with cobalt glows and grain textures that maintain a premium editorial feel across all pages, including shop details and policy documents.
 
-### 2. Deep Night Design System
-A customized Tailwind v4 design system built around `oklch` color spaces. The "Deep Night" aesthetic uses high-contrast cobalt accents against a midnight navy background, utilizing grain textures and glassmorphism for a premium feel.
+### 2. Optimized Navigation & Lifecycle
+Fully compatible with React 19's strict rendering. Includes a custom scroll-to-top reset on page transitions and stabilized GSAP contexts to ensure entrance animations never stick or "darken" during client-side navigation.
 
 ### 3. Fragrance Catalog & Discovery
 A robust shop system featuring:
