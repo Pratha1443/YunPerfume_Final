@@ -12,17 +12,21 @@ export default function TheAtelier() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Set initial state
+      gsap.set(".reveal-section", { opacity: 0, y: 30 });
+      
       // Smooth entrance for editorial sections
-      gsap.from(".reveal-section", {
-        opacity: 0,
-        y: 30,
+      gsap.to(".reveal-section", {
+        opacity: 1,
+        y: 0,
         duration: 1.2,
         stagger: 0.2,
         ease: "power2.out",
         scrollTrigger: {
           trigger: ".reveal-section",
           start: "top 85%",
-        }
+        },
+        clearProps: "all"
       });
     }, containerRef);
 
@@ -76,7 +80,7 @@ export default function TheAtelier() {
       <section className="py-[20vh] px-5 md:px-10 max-w-[1400px] mx-auto reveal-section">
         <div className="max-w-2xl mx-auto text-center mb-[12vh]">
           <h2 className="h-display text-5xl md:text-7xl font-light mb-8">Batched by hand.</h2>
-          <p className="text-xl font-display italic text-foreground/80">Every bottle is filled, labeled, and sealed at our Indiranagar studio.</p>
+          <p className="text-xl font-display italic text-foreground/80">Every bottle is filled, labeled, and sealed at our Pune studio.</p>
         </div>
         
         <div className="grid md:grid-cols-12 gap-10 items-end">

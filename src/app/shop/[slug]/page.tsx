@@ -34,20 +34,30 @@ export default function ProductPage({ params }: PageProps) {
   const others = fragrances.filter((f) => f.id !== fragrance.id).slice(0, 3);
 
   useEffect(() => {
-    gsap.from(".product-fade", {
-      opacity: 0,
-      y: 20,
-      duration: 1.2,
-      stagger: 0.08,
-      ease: "power3.out"
+    const ctx = gsap.context(() => {
+      // Set initial state
+      gsap.set(".product-fade", { opacity: 0, y: 20 });
+      
+      // Animate to final state
+      gsap.to(".product-fade", {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        stagger: 0.08,
+        ease: "power3.out",
+        clearProps: "all" // Important: removes inline styles after animation
+      });
     });
+
+    return () => ctx.revert();
   }, [slug]);
 
   return (
-    <div className="relative min-h-screen bg-background pt-24 md:pt-32 overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute top-0 right-0 -z-10 w-[50vw] h-[50vw] bg-accent/5 blur-[120px] rounded-full" />
-      <div className="absolute bottom-0 left-0 -z-10 w-[40vw] h-[40vw] bg-accent/5 blur-[100px] rounded-full" />
+    <div className="relative min-h-screen bg-transparent pt-24 md:pt-32 overflow-hidden noise">
+      {/* Deep Atmospheric Glows */}
+      <div className="absolute top-0 right-0 -z-10 w-[70vw] h-[70vw] bg-accent/15 blur-[150px] rounded-full" />
+      <div className="absolute bottom-[-10%] left-[-10%] -z-10 w-[50vw] h-[50vw] bg-accent/10 blur-[130px] rounded-full" />
+      <div className="absolute top-[20%] left-[10%] -z-10 w-[30vw] h-[30vw] bg-accent/5 blur-[100px] rounded-full" />
 
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <Link 

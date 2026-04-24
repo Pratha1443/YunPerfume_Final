@@ -2,11 +2,13 @@ import Link from "next/link";
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-background pt-32 pb-24 md:pt-40">
-      {/* Background Ambience */}
-      <div className="absolute top-0 left-0 -z-10 w-[50vw] h-[50vw] bg-accent/5 blur-[120px] rounded-full" />
+    <div className="relative min-h-screen bg-transparent pt-32 pb-24 md:pt-40 overflow-hidden noise">
+      {/* Deep Atmospheric Glows */}
+      <div className="absolute top-0 right-0 -z-10 w-[80vw] h-[80vw] bg-accent/20 blur-[160px] rounded-full" />
+      <div className="absolute bottom-[-10%] left-[-10%] -z-10 w-[60vw] h-[60vw] bg-accent/10 blur-[140px] rounded-full" />
+      <div className="absolute top-[30%] left-[20%] -z-10 w-[40vw] h-[40vw] bg-accent/5 blur-[120px] rounded-full" />
       
-      <div className="mx-auto max-w-[800px] px-5 md:px-10">
+      <div className="mx-auto w-full max-w-[800px] px-5 md:px-10">
         <Link href="/" className="eyebrow text-foreground/40 hover:text-accent transition-colors">
           ← Back to home
         </Link>
