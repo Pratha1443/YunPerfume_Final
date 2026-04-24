@@ -45,12 +45,13 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex h-20 max-w-[1400px] items-center justify-between px-5 md:h-24 md:px-10">
         <Link href="/" className="relative h-12 w-36 md:h-16 md:w-48 transition-opacity hover:opacity-80">
-          <Image
+            <Image
             src={logo}
             alt="YUN Atelier"
             fill
             className="object-contain object-left"
             priority
+            sizes="(max-width: 768px) 144px, 192px"
           />
         </Link>
 

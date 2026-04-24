@@ -6,47 +6,51 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="bg-transparent pt-32 pb-32 md:pt-40">
-      <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-        <div className="grid gap-16 md:grid-cols-12 md:gap-20">
-          <div className="md:col-span-5">
+    <div className="relative flex min-h-screen flex-col pt-20 md:pt-24">
+      <div className="flex flex-1 items-center py-12 md:py-0">
+        <div className="mx-auto w-full max-w-[1400px] px-5 md:px-10">
+        <div className="grid gap-12 md:grid-cols-12 md:gap-20">
+          <div className="flex flex-col justify-center md:col-span-5">
             <div className="flex items-center gap-4">
               <span className="block h-px w-12 bg-foreground/40" />
               <span className="eyebrow text-foreground/60">Write to us</span>
             </div>
-            <h1 className="h-display mt-6 text-[14vw] leading-[0.9] md:text-[7vw] lg:text-[110px]">
+            <h1 className="h-display mt-4 text-[12vw] leading-[0.9] md:text-[7vw] lg:text-[100px]">
               Hello,<br />
               <em className="italic font-light text-accent">we listen.</em>
             </h1>
-            <p className="mt-8 max-w-sm leading-relaxed text-muted-foreground">
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
               Every message is read by a person at the atelier, usually within two working days.
               No bots, no templates.
             </p>
-
-            <dl className="mt-12 space-y-6 text-sm">
-              <div>
-                <dt className="eyebrow text-muted-foreground">Atelier</dt>
-                <dd className="mt-1 font-display text-xl font-light">
-                  Indiranagar, Bengaluru 560038
-                </dd>
+            <div className="mt-10 space-y-6 md:space-y-4">
+              <div className="flex flex-col md:flex-row md:gap-12">
+                <div className="flex-1">
+                  <dt className="eyebrow text-[10px] text-muted-foreground">Atelier</dt>
+                  <dd className="mt-1 font-display text-lg font-light leading-tight">
+                    Indiranagar, Bengaluru 560038
+                  </dd>
+                </div>
+                <div className="mt-4 flex-1 md:mt-0">
+                  <dt className="eyebrow text-[10px] text-muted-foreground">Studio hours</dt>
+                  <dd className="mt-1 text-xs">Mon — Sat, 11:00 to 19:00 IST</dd>
+                </div>
               </div>
-              <div>
-                <dt className="eyebrow text-muted-foreground">Studio hours</dt>
-                <dd className="mt-1">Mon — Sat, 11:00 to 19:00 IST</dd>
+              <div className="flex flex-col md:flex-row md:gap-12">
+                <div className="flex-1">
+                  <dt className="eyebrow text-[10px] text-muted-foreground">Email</dt>
+                  <dd className="mt-1 text-xs underline underline-offset-4 decoration-foreground/20 hover:text-accent transition-colors">
+                    <a href="mailto:atelier@yun.in">atelier@yun.in</a>
+                  </dd>
+                </div>
+                <div className="mt-4 flex-1 md:mt-0">
+                  <dt className="eyebrow text-[10px] text-muted-foreground">Phone</dt>
+                  <dd className="mt-1 text-xs">
+                    <a href="tel:+918000000000">+91 80 0000 0000</a>
+                  </dd>
+                </div>
               </div>
-              <div>
-                <dt className="eyebrow text-muted-foreground">Email</dt>
-                <dd className="mt-1">
-                  <a href="mailto:atelier@yun.in" className="hover:text-accent">atelier@yun.in</a>
-                </dd>
-              </div>
-              <div>
-                <dt className="eyebrow text-muted-foreground">Phone</dt>
-                <dd className="mt-1">
-                  <a href="tel:+918000000000" className="hover:text-accent">+91 80 0000 0000</a>
-                </dd>
-              </div>
-            </dl>
+            </div>
           </div>
 
           <div className="md:col-span-7">
@@ -77,7 +81,7 @@ export default function Contact() {
                     id="message"
                     name="message"
                     required
-                    rows={6}
+                    rows={4}
                     className="w-full resize-none border-b border-foreground/30 bg-transparent py-3 font-display text-xl font-light outline-none transition-colors focus:border-foreground"
                   />
                 </div>
@@ -93,7 +97,8 @@ export default function Contact() {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 function Field({ label, name, type, required }: { label: string; name: string; type: string; required?: boolean }) {

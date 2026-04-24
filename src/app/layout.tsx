@@ -7,7 +7,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CartDrawer } from "@/components/cart-drawer";
 import { Preloader } from "@/components/ui/preloader";
-import { ThemeProvider } from "@/components/theme-provider";
+
 
 export const metadata: Metadata = {
   title: "YUN — Slow perfumery from India",
@@ -39,13 +39,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className="antialiased bg-transparent">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
           <Preloader />
           <AuthProvider>
             <CartProvider>
@@ -61,7 +54,6 @@ export default function RootLayout({
               </SmoothScrollProvider>
             </CartProvider>
           </AuthProvider>
-        </ThemeProvider>
       </body>
     </html>
   );

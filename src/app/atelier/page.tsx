@@ -52,6 +52,7 @@ export default function TheAtelier() {
             fill 
             priority
             className="object-cover" 
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
         <div className="p-10 md:p-20 flex flex-col justify-center bg-card">
@@ -86,6 +87,7 @@ export default function TheAtelier() {
                 alt="The crafting process" 
                 fill 
                 className="object-cover transition-transform duration-700 hover:scale-105" 
+                sizes="(max-width: 768px) 100vw, 60vw"
               />
             </div>
           </div>

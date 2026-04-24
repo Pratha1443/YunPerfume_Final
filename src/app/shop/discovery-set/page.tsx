@@ -13,6 +13,7 @@ export default function DiscoverySet() {
           fill 
           className="object-cover opacity-60"
           priority
+          sizes="100vw"
         />
         <div className="relative z-10 text-center px-5 max-w-3xl">
           <div className="eyebrow text-foreground/70 mb-6">Begin here</div>
@@ -58,6 +59,7 @@ export default function DiscoverySet() {
                 alt="Vials nested in silk" 
                 fill 
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
              />
           </div>
         </div>

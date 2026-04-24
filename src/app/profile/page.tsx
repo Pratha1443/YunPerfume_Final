@@ -85,7 +85,7 @@ export default async function ProfilePage() {
                         {order.items.map((item) => (
                           <div key={item.id} className="flex gap-4 items-center">
                             <div className="w-16 h-16 bg-muted rounded-sm flex-shrink-0 relative">
-                               {item.product.imageUrl && <Image src={item.product.imageUrl} alt={item.product.name} fill className="object-cover"/>}
+                               {item.product.imageUrl && <Image src={item.product.imageUrl} alt={item.product.name} fill className="object-cover" sizes="64px"/>}
                             </div>
                             <div className="flex-1">
                                <div className="font-display">{item.product.name}</div>

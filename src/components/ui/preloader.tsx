@@ -109,6 +109,7 @@ export function Preloader() {
             fill
             className="object-contain"
             priority
+            sizes="(max-width: 768px) 75vw, 500px"
           />
         </div>
 

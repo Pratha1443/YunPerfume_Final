@@ -70,6 +70,7 @@ export default function About() {
             fill
             className="object-cover"
             priority
+            sizes="100vw"
           />
         </div>
 
@@ -92,6 +93,7 @@ export default function About() {
               alt="Botanicals"
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
             />
           </div>
           <div className="flex flex-col justify-center md:col-span-7">
@@ -120,6 +122,7 @@ export default function About() {
             alt="YUN bottle"
             fill
             className="object-contain"
+            sizes="100vw"
           />
         </div>
       </div>

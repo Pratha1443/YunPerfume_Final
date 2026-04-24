@@ -67,6 +67,7 @@ export default function ProductPage({ params }: PageProps) {
                   fill
                   className="object-cover"
                   priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute left-6 top-6 font-mono text-[10px] tracking-widest text-foreground/40 uppercase">
                   Edition N°{fragrance.index}
@@ -168,6 +169,7 @@ export default function ProductPage({ params }: PageProps) {
                     alt={o.name}
                     fill
                     className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 </div>

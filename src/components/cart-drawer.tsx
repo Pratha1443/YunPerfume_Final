@@ -68,6 +68,7 @@ export function CartDrawer() {
                       alt={item.name}
                       fill
                       className="object-cover"
+                      sizes="80px"
                     />
                   </div>
                   <div className="flex flex-1 flex-col">

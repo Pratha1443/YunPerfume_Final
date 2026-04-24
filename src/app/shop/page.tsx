@@ -46,6 +46,7 @@ export default function Shop() {
                   alt={f.name}
                   fill
                   className="object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute left-5 top-5 font-mono text-xs mix-blend-difference text-white">
                   N°{f.index}
