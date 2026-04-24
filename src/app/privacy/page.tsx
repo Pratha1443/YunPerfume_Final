@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         
         <h1 className="h-display mt-8 text-5xl md:text-6xl font-light">Privacy Policy</h1>
         <p className="mt-4 font-mono text-[10px] tracking-widest text-foreground/30 uppercase">
-          Last Updated: April 23, 2024
+          Last Updated: April 23, 2026
         </p>
 
         <div className="mt-16 space-y-12 text-foreground/70 leading-relaxed text-lg">

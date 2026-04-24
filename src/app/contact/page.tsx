@@ -28,7 +28,7 @@ export default function Contact() {
                 <div className="flex-1">
                   <dt className="eyebrow text-[10px] text-muted-foreground">Atelier</dt>
                   <dd className="mt-1 font-display text-lg font-light leading-tight">
-                    Indiranagar, Bengaluru 560038
+                    Koregaon Park, Pune 411001
                   </dd>
                 </div>
                 <div className="mt-4 flex-1 md:mt-0">

@@ -5,11 +5,11 @@ import craft from "@/assets/story-craft.jpg";
 import hero from "@/assets/yun-bottle-hero.jpg";
 
 export const metadata: Metadata = {
-  title: "About — YUN Atelier",
-  description: "YUN is a small perfume house in Bengaluru. We make four fragrances, slowly, with materials from across India.",
+  title: "The Atelier — YUN",
+  description: "YUN is a small perfume house in Pune. We make four fragrances, slowly, with materials from across India.",
   openGraph: {
-    title: "About — YUN Atelier",
-    description: "A small perfume house in Bengaluru, working slowly with Indian materials.",
+    title: "The Atelier — YUN",
+    description: "A small perfume house in Pune, working slowly with Indian materials.",
     images: ["/og-about.jpg"], // Fallback to a string path for OG
   },
 };
@@ -28,7 +28,7 @@ const PILLARS = [
   {
     title: "Made by hand",
     body:
-      "Bottles are filled, capped and labelled by hand in Bengaluru. Each one carries the initials of the person who made it.",
+      "Bottles are filled, capped and labelled by hand in Pune. Each one carries the initials of the person who made it.",
   },
 ];
 
@@ -55,10 +55,9 @@ export default function About() {
             </h1>
           </div>
           <div className="md:col-span-5 md:pt-12">
-            <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-              YUN was founded in Bengaluru in 2023 by a small team of perfumers, growers and
-              writers. We share a quiet conviction: that fragrance, like food and music and
-              language, belongs to the place it comes from.
+            <p className="mt-8 leading-relaxed text-muted-foreground">
+              YUN was founded in Pune in 2026 by a small team of perfumers, growers and
+              designers who shared a single conviction: that luxury is a function of time.
             </p>
           </div>
         </div>

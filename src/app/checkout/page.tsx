@@ -23,8 +23,7 @@ export default function Checkout() {
           <div className="eyebrow text-accent">Order received</div>
           <h1 className="h-display mt-4 text-5xl font-light md:text-6xl">Thank you.</h1>
           <p className="mt-6 leading-relaxed text-muted-foreground">
-            A confirmation has been sent to your email. Your order will be hand-packed and
-            dispatched within two working days from our Bengaluru atelier.
+            A confirmation has been sent to your email. Hand-packaged and dispatched within two working days from our Pune atelier.
           </p>
           <Link href="/shop" className="eyebrow mt-10 inline-block border-b border-foreground pb-1">
             Continue browsing →
@@ -102,7 +101,7 @@ export default function Checkout() {
               <div className="rounded-sm border border-border/60 bg-card p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-display text-2xl font-light">Razorpay</div>
+                    <div className="leading-relaxed">Individually poured and numbered in our small-batch Pune studio.</div>
                     <div className="mt-1 text-sm text-muted-foreground">
                       UPI · Cards · Net Banking · Wallets
                     </div>

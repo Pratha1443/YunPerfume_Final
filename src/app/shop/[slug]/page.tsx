@@ -144,7 +144,7 @@ export default function ProductPage({ params }: PageProps) {
               </div>
               <div>
                 <div className="eyebrow mb-3 text-foreground/70">Atelier</div>
-                <div className="leading-relaxed">Individually poured and numbered in our small-batch Bengaluru studio.</div>
+                <div className="leading-relaxed">Individually poured and numbered in our small-batch Pune studio.</div>
               </div>
             </div>
           </div>

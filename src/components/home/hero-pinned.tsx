@@ -98,7 +98,7 @@ export function HeroPinned() {
         <div ref={headlineRef} className="mt-[5vh] max-w-4xl">
           <div className="mb-8 flex items-center gap-4 overflow-hidden">
              <span className="block h-px w-8 bg-foreground/40 headline-line" />
-             <span className="eyebrow text-foreground/60 headline-line">Est. 2024 / India</span>
+             <span className="eyebrow text-foreground/60 headline-line">Est. 2026 / India</span>
           </div>
           <h2 className="h-display text-[10vw] leading-[1.1] tracking-tight md:text-[7vw] lg:text-[110px]">
             <span className="block overflow-hidden pb-[0.1em] -mb-[0.1em]">
@@ -150,7 +150,7 @@ export function HeroPinned() {
         <div className="eyebrow [writing-mode:vertical-lr] flex items-center gap-6 text-foreground/30">
           <span className="tracking-[0.4em]">COLLECTION N°01</span>
           <span className="block h-24 w-px bg-foreground/10" />
-          <span className="rotate-180">2024</span>
+          <span className="rotate-180">2026</span>
         </div>
       </div>
     </section>

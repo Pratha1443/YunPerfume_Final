@@ -52,7 +52,7 @@ export default function ShippingPage() {
 
           <section className="pt-12 border-t border-border/40">
             <p className="text-sm italic">
-              Hand-packaged and dispatched from our Bengaluru atelier.
+              Hand-packaged and dispatched from our Pune atelier.
             </p>
           </section>
         </div>

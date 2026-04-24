@@ -1,6 +1,6 @@
 # YUN Atelier — Slow Perfumery from India
 
-YUN is a high-end, editorial perfume house based in Bengaluru, India. This digital atelier is designed to reflect the brand's core philosophy: **Patience, Materiality, and Ritual.**
+YUN is a high-end, editorial perfume house based in Pune, India. This digital atelier is designed to reflect the brand's core philosophy: **Patience, Materiality, and Ritual.**
 
 The website provides a cinematic, scroll-driven experience that introduces users to the inaugural collection of four signature fragrances—Mogra Noir, Oud Vārā, Sandal Velvet, and Chai Atelier.
 
@@ -87,4 +87,4 @@ A robust shop system featuring:
 
 ---
 
-© 2024 YUN Atelier · Bengaluru, India
+© 2026 YUN Atelier · Pune, India

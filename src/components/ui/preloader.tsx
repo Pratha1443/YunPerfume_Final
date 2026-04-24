@@ -119,7 +119,7 @@ export function Preloader() {
              Atmospheric Alchemy
            </p>
            <p className="preloader-text font-mono text-[8px] tracking-[0.4em] text-foreground/30 uppercase">
-             Mumbai — Grasse // Edition 2024
+             Pune — Grasse // Edition 2026
            </p>
         </div>
       </div>

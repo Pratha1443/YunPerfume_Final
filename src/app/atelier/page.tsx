@@ -60,7 +60,7 @@ export default function TheAtelier() {
           <h2 className="font-display text-4xl md:text-5xl font-light mb-8">India, through <br/> a liquid prism.</h2>
           <div className="space-y-6 text-muted-foreground leading-relaxed">
             <p>
-              YUN was born in Bengaluru as an antithesis to fast perfumery. 
+              YUN was born in Pune as an antithesis to fast perfumery. 
               We don't follow trends or seasonal calendars. Instead, we follow the harvest.
             </p>
             <p>
