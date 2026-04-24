@@ -6,7 +6,7 @@ import { AuthProvider } from "@/lib/auth-store";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CartDrawer } from "@/components/cart-drawer";
-import { Preloader } from "@/components/ui/preloader";
+import { Preloader } from "@/components/preloader";
 
 
 export const metadata: Metadata = {

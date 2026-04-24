@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import Image from "next/image";
-import logo from "../../../Images/YunLogo.png";
+import logo from "@/assets/logo.png";
 
 export function Preloader() {
   const [complete, setComplete] = useState(false);

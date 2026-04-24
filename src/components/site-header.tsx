@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { ShoppingBag, User2, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 import { cn } from "@/lib/utils";
-import logo from "../../Images/YunLogo.png";
+import logo from "@/assets/logo.png";
 
 const NAV = [
   { href: "/", label: "Home" },
