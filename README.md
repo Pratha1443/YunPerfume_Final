@@ -17,7 +17,7 @@ YUN was born in 2026 as an antithesis to fast perfumery. Every fragrance in the 
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) (Theming, OKLCH colors)
 - **Animations**: [GSAP](https://gsap.com/) (ScrollTrigger, Timelines)
 - **Smooth Scroll**: [Lenis](https://lenis.darkroom.engineering/)
-- **Database**: [Prisma](https://www.prisma.io/) + [Neon](https://neon.tech/) (PostgreSQL)
+- **Database**: [Prisma](https://www.prisma.io/) + [Cloudflare D1](https://developers.cloudflare.com/d1/) (SQLite)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Deployment**: Optimized for [Cloudflare Pages](https://pages.cloudflare.com/)
 
