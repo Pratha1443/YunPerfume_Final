@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "setup": "npm run db:migrate:local && npm run db:seed",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
