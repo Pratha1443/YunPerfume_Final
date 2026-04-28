@@ -72,7 +72,7 @@ export async function POST(req: Request) {
     const verifyUrl = `${appUrl}/api/auth/verify?token=${token}&email=${encodeURIComponent(email)}`;
 
     await resend.emails.send({
-      from: 'YUN Atelier <magic@yun.in>',
+      from: 'YUN Atelier <magic@yunperfume.in>',
       to: [email],
       subject: 'Sign in to YUN — your code is inside',
       html: `
