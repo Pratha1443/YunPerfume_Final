@@ -68,7 +68,7 @@ export async function POST(req: Request) {
 
     // 5. Send email via Resend
     const resend = new Resend(env.RESEND_API_KEY);
-    const appUrl = env.NEXT_PUBLIC_APP_URL || 'https://yunperfume.com';
+    const appUrl = env.NEXT_PUBLIC_APP_URL || 'https://yunperfume.in';
     const verifyUrl = `${appUrl}/api/auth/verify?token=${token}&email=${encodeURIComponent(email)}`;
 
     await resend.emails.send({

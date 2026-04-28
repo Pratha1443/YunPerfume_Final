@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 export const runtime = 'edge';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://yunperfume.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://yunperfume.in';
 
   const { env } = getRequestContext();
   const db = getDb(env.DB);

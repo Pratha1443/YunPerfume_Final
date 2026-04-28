@@ -20,7 +20,7 @@ export async function GET(req: Request) {
   const token = searchParams.get('token')?.toUpperCase();
   const email = searchParams.get('email')?.toLowerCase().trim();
 
-  const appUrl = 'https://yunperfume.com';
+  const appUrl = 'https://yunperfume.in';
   const loginUrl = `${appUrl}/login`;
   const profileUrl = `${appUrl}/profile`;
 

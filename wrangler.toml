@@ -19,4 +19,4 @@ preview_id = "5e6e17b784d34af58dec1688e3ac8f98"
 
 [vars]
 NODE_ENV = "production"
-NEXT_PUBLIC_APP_URL = "https://yunperfume.com"
+NEXT_PUBLIC_APP_URL = "https://yunperfume.in"
