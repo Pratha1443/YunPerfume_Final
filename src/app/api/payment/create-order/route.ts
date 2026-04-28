@@ -120,7 +120,6 @@ export async function POST(req: Request) {
     const rzpOrder = await rzpRes.json() as { id: string; amount: number; currency: string };
 
     // 2. Persist order in D1 (store phone + name inside shippingAddress JSON)
-    const db = getDb(env.DB);
     const orderId = `ord_${nanoid(12)}`;
     const shippingAddress = JSON.stringify({ name, phone, ...address });
 

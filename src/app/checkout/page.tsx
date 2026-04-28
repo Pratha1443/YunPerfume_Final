@@ -45,11 +45,6 @@ function loadRazorpay(): Promise<boolean> {
   });
 }
 
-export const metadata = {
-  title: "Checkout — YUN",
-  robots: "noindex, nofollow",
-};
-
 export default function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
   const { user } = useSession();
