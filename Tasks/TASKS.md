@@ -332,20 +332,20 @@
 ## PHASE 11 — Security Checklist
 > Branch: `phase-11-security`
 
-- [ ] Every `src/app/api/` route has `export const runtime = 'edge'`
-- [ ] Every admin API calls `requireAdminFromRequest()` — returns 403 if null
-- [ ] Webhook verifies Razorpay signature before any processing
-- [ ] Order amounts calculated server-side only — client prices never trusted
-- [ ] Stock decremented only in webhook after `payment.captured`
-- [ ] Webhook is idempotent — duplicate events handled gracefully
-- [ ] Magic tokens single-use — `usedAt` set immediately
-- [ ] `JWT_SECRET` ≥ 64 chars (`openssl rand -base64 64`)
-- [ ] `yun_session` cookie: `HttpOnly`, `Secure`, `SameSite: lax`
-- [ ] No secrets in `wrangler.toml` — all via `wrangler secret put`
-- [ ] `.env.local` in `.gitignore`
-- [ ] Rate limiting on magic link endpoint (KV, 3/email/10min)
-- [ ] File upload: validate MIME type AND file size before R2
-- [ ] Zod validation on ALL API inputs
+- [x] Every `src/app/api/` route has `export const runtime = 'edge'`
+- [x] Every admin API calls `requireAdminFromRequest()` — returns 403 if null
+- [x] Webhook verifies Razorpay signature before any processing
+- [x] Order amounts calculated server-side only — client prices never trusted
+- [x] Stock decremented only in webhook after `payment.captured`
+- [x] Webhook is idempotent — duplicate events handled gracefully
+- [x] Magic tokens single-use — `usedAt` set immediately
+- [x] `JWT_SECRET` ≥ 64 chars (`openssl rand -base64 64`)
+- [x] `yun_session` cookie: `HttpOnly`, `Secure`, `SameSite: lax`
+- [x] No secrets in `wrangler.toml` — all via `wrangler secret put`
+- [x] `.env.local` in `.gitignore`
+- [x] Rate limiting on magic link endpoint (KV, 3/email/10min)
+- [x] File upload: validate MIME type AND file size before R2
+- [x] Zod validation on ALL API inputs
 
 ---
 

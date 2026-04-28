@@ -19,17 +19,22 @@ import {
 } from '@/lib/auth';
 import { nanoid } from 'nanoid';
 import { eq } from 'drizzle-orm';
+import { z } from 'zod';
+
+const magicLinkSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+});
 
 export async function POST(req: Request) {
   try {
     const { env } = getRequestContext();
-    const body = await req.json() as { email?: string };
-    const email = body.email?.toLowerCase().trim();
-
-    // 1. Validate email
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({ error: 'Valid email required' }, { status: 400 });
+    const body = await req.json();
+    
+    const parsed = magicLinkSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.errors[0].message }, { status: 400 });
     }
+    const email = parsed.data.email.toLowerCase().trim();
 
     // 2. Rate limit via KV
     const { allowed } = await checkRateLimit(env.SESSIONS, email);
