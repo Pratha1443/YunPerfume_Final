@@ -70,8 +70,10 @@ export default async function AdminOrders() {
                     <div className="font-mono text-[10px] text-muted-foreground mb-1 uppercase tracking-wider">
                       Order ID
                     </div>
-                    <div className="font-mono text-sm">{order.id}</div>
-                    <div className="text-xs text-muted-foreground mt-1">
+                    <Link href={`/admin/orders/${order.id}`} className="font-mono text-sm hover:text-accent transition-colors underline underline-offset-4 decoration-border">
+                      {order.id}
+                    </Link>
+                    <div className="text-xs text-muted-foreground mt-2">
                       {order.createdAt ? new Date(order.createdAt).toLocaleString('en-IN') : '—'}
                     </div>
                   </div>
