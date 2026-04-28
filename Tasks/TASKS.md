@@ -317,15 +317,15 @@
 ## PHASE 10 — Polish & Edge Cases
 > Branch: `phase-10-polish`
 
-- [ ] Wire "Add to bag" on discovery-set page
-- [ ] Ensure discovery-set product in DB seed with `isDiscoverySet: true`
-- [ ] `src/app/not-found.tsx` — brand-styled 404
-- [ ] `src/app/error.tsx` — with retry button
-- [ ] `src/app/shop/loading.tsx` — product grid skeleton
-- [ ] `src/app/admin/loading.tsx` — minimal spinner
-- [ ] `noindex` meta on `/order/*`, `/admin/*`, `/login`
-- [ ] `src/app/sitemap.ts` — all 4 product URLs
-- [ ] `src/app/robots.ts` — disallow `/admin`, `/api`, `/order`
+- [x] Wire "Add to bag" on discovery-set page
+- [x] Ensure discovery-set product in DB seed with `isDiscoverySet: true`
+- [x] `src/app/not-found.tsx` — brand-styled 404
+- [x] `src/app/error.tsx` — with retry button
+- [x] `src/app/shop/loading.tsx` — product grid skeleton
+- [x] `src/app/admin/loading.tsx` — minimal spinner
+- [x] `noindex` meta on `/order/*`, `/admin/*`, `/login`
+- [x] `src/app/sitemap.ts` — all 4 product URLs
+- [x] `src/app/robots.ts` — disallow `/admin`, `/api`, `/order`
 
 ---
 

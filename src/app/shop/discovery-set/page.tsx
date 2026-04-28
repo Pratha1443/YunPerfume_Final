@@ -1,9 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { formatINR } from "@/lib/utils";
+import { useCart } from "@/lib/cart-store";
 import discoveryImage from "@/assets/story-botanicals.jpg"; // Placeholder for actual discovery set image
 
 export default function DiscoverySet() {
+  const { add } = useCart();
   return (
     <div className="bg-transparent">
       <section className="relative h-[80vh] w-full overflow-hidden flex items-center justify-center bg-sand/30">
@@ -46,8 +50,17 @@ export default function DiscoverySet() {
             </div>
             
             <div className="pt-8 flex items-baseline gap-6">
-              <span className="font-mono text-3xl">{formatINR(1200)}</span>
-              <button className="bg-foreground px-12 py-5 text-sm tracking-wider text-background hover:bg-accent transition-all">
+              <span className="font-mono text-3xl">{formatINR(1499)}</span>
+              <button 
+                onClick={() => add({
+                  id: "prod_discovery_set",
+                  name: "Discovery Set",
+                  price: 1499,
+                  size: "4 x 2ml",
+                  image: discoveryImage.src,
+                })}
+                className="bg-foreground px-12 py-5 text-sm tracking-wider text-background hover:bg-accent transition-all"
+              >
                 ADD TO BAG
               </button>
             </div>
