@@ -8,7 +8,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
+    const body = await req.json() as { email: string };
+    const { email } = body;
     
     // In production, we'd generate a token/link and save it to KV or DB
     const token = Math.random().toString(36).slice(2, 8).toUpperCase();
