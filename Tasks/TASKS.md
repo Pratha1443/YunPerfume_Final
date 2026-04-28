@@ -303,14 +303,14 @@
 > Branch: `phase-9-r2`
 
 ### 9.1 Image upload API
-- [ ] `POST /api/upload/route.ts` — admin only, max 5MB, jpg/png/webp, store in R2
+- [x] `POST /api/upload/route.ts` — admin only, max 5MB, jpg/png/webp, store in R2
 
 ### 9.2 Upload existing product images to R2
-- [ ] Upload all 4 fragrance images to `yun-perfume-images` bucket
-- [ ] Update seed script with real R2 URLs
+- [x] Upload all 4 fragrance images to `yun-perfume-images` bucket
+- [x] Update seed script with real R2 URLs
 
 ### 9.3 R2 URL helper
-- [ ] `src/lib/r2.ts` — `getR2Url(key)` using `NEXT_PUBLIC_R2_PUBLIC_URL`
+- [x] `src/lib/r2.ts` — `getR2Url(key)` using `NEXT_PUBLIC_R2_PUBLIC_URL`
 
 ---
 
