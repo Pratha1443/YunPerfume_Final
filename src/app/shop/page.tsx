@@ -1,20 +1,34 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import { fragrances } from "@/lib/fragrances";
-import { formatINR } from "@/lib/utils";
+export const runtime = 'edge';
 
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
+import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getDb, products } from '@/db';
+import { eq, and } from 'drizzle-orm';
+import { formatINR } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: "Shop — YUN Atelier",
-  description: "Explore the four signature fragrances of YUN. Mogra, oud, sandalwood and chai. Crafted in small batches in India.",
+  title: 'Shop — YUN Atelier',
+  description:
+    'Explore the four signature fragrances of YUN. Mogra, oud, sandalwood and chai. Crafted in small batches in India.',
   openGraph: {
-    title: "Shop — YUN Atelier",
-    description: "Four signature fragrances from the YUN atelier.",
+    title: 'Shop — YUN Atelier',
+    description: 'Four signature fragrances from the YUN atelier.',
   },
 };
 
-export default function Shop() {
+export default async function ShopPage() {
+  const { env } = getRequestContext();
+  const db = getDb(env.DB);
+
+  const fragrances = await db
+    .select()
+    .from(products)
+    .where(and(eq(products.active, true), eq(products.isDiscoverySet, false)))
+    .orderBy(products.index)
+    .all();
+
   return (
     <div className="bg-transparent pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
@@ -29,7 +43,8 @@ export default function Shop() {
             </h1>
           </div>
           <div className="hidden font-mono text-sm text-muted-foreground md:block">
-            04 / 04
+            {String(fragrances.length).padStart(2, '0')} /{' '}
+            {String(fragrances.length).padStart(2, '0')}
           </div>
         </div>
 
@@ -38,28 +53,32 @@ export default function Shop() {
             <Link
               key={f.id}
               href={`/shop/${f.slug}`}
-              className={`group block ${i % 2 === 1 ? "md:mt-32" : ""}`}
+              className={`group block ${i % 2 === 1 ? 'md:mt-32' : ''}`}
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-                <Image
-                  src={f.image}
-                  alt={f.name}
-                  fill
-                  className="object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
+                {f.imageUrl ? (
+                  <Image
+                    src={f.imageUrl}
+                    alt={f.name}
+                    fill
+                    className="object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-muted" />
+                )}
                 <div className="absolute left-5 top-5 font-mono text-xs mix-blend-difference text-white">
-                  N°{f.index}
+                  N°{String(f.index ?? i + 1).padStart(2, '0')}
                 </div>
               </div>
               <div className="mt-6 flex items-end justify-between">
                 <div>
                   <h2 className="font-display text-3xl font-light md:text-4xl">{f.name}</h2>
-                  <div className="eyebrow mt-2 text-muted-foreground">{f.family}</div>
+                  <div className="eyebrow mt-2 text-muted-foreground">{f.scentFamily}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-mono text-sm">{formatINR(f.price)}</div>
-                  <div className="eyebrow mt-1 text-muted-foreground">50 ml</div>
+                  <div className="font-mono text-sm">{formatINR(f.price / 100)}</div>
+                  <div className="eyebrow mt-1 text-muted-foreground">{f.size ?? '50 ml'}</div>
                 </div>
               </div>
               <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
