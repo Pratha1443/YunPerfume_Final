@@ -2,36 +2,57 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/lib/cart-store";
 import { formatINR } from "@/lib/utils";
-import { useAuth } from "@/lib/auth-store";
-import Image from "next/image";
+import { useSession } from "@/hooks/use-session";
 
-export default function Checkout() {
+// Razorpay types
+declare global {
+  interface Window {
+    Razorpay: new (options: RazorpayOptions) => RazorpayInstance;
+  }
+}
+interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  prefill: { name: string; email: string; contact: string };
+  theme: { color: string };
+  handler: (response: RazorpayResponse) => void;
+  modal: { ondismiss: () => void };
+}
+interface RazorpayResponse {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+}
+interface RazorpayInstance {
+  open(): void;
+}
+
+function loadRazorpay(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true);
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
+export default function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
-  const { user } = useAuth();
+  const { user } = useSession();
   const [processing, setProcessing] = useState(false);
-  const [done, setDone] = useState(false);
+  const [error, setError] = useState("");
 
   const shipping = subtotal >= 3000 || subtotal === 0 ? 0 : 150;
   const total = subtotal + shipping;
-
-  if (done) {
-    return (
-      <div className="bg-transparent pt-32 pb-32 md:pt-40">
-        <div className="mx-auto max-w-md px-5 text-center">
-          <div className="eyebrow text-accent">Order received</div>
-          <h1 className="h-display mt-4 text-5xl font-light md:text-6xl">Thank you.</h1>
-          <p className="mt-6 leading-relaxed text-muted-foreground">
-            A confirmation has been sent to your email. Hand-packaged and dispatched within two working days from our Pune atelier.
-          </p>
-          <Link href="/shop" className="eyebrow mt-10 inline-block border-b border-foreground pb-1">
-            Continue browsing →
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   if (items.length === 0) {
     return (
@@ -44,6 +65,94 @@ export default function Checkout() {
         </div>
       </div>
     );
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setProcessing(true);
+
+    const form = new FormData(e.currentTarget);
+    const name = `${form.get("firstName")} ${form.get("lastName")}`.trim();
+    const email = (form.get("email") as string) || user?.email || "";
+    const phone = form.get("phone") as string;
+    const address = {
+      line1: form.get("address1") as string,
+      line2: (form.get("address2") as string) || undefined,
+      city: form.get("city") as string,
+      state: form.get("state") as string,
+      pin: form.get("pin") as string,
+    };
+
+    try {
+      // 1. Create Razorpay order in backend
+      const res = await fetch("/api/payment/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: total * 100, // convert to paise
+          email,
+          phone,
+          name,
+          address,
+          items: items.map((i) => ({
+            productId: i.id.split("-")[0], // strip size suffix
+            name: i.name,
+            size: i.size,
+            quantity: i.quantity,
+            price: i.price,
+          })),
+        }),
+      });
+
+      const data = await res.json() as {
+        razorpayOrderId?: string;
+        orderId?: string;
+        amount?: number;
+        currency?: string;
+        keyId?: string;
+        error?: string;
+      };
+
+      if (!res.ok || !data.razorpayOrderId) {
+        throw new Error(data.error ?? "Failed to create order");
+      }
+
+      // 2. Load Razorpay script and open modal
+      const loaded = await loadRazorpay();
+      if (!loaded) throw new Error("Could not load Razorpay. Check your connection.");
+
+      const rzp = new window.Razorpay({
+        key: data.keyId!,
+        amount: data.amount!,
+        currency: data.currency ?? "INR",
+        name: "YUN Atelier",
+        description: "Signature Fragrance Order",
+        order_id: data.razorpayOrderId,
+        prefill: { name, email, contact: phone },
+        theme: { color: "#4a6fa5" },
+        handler: (response) => {
+          // Payment successful — redirect to success page
+          clear();
+          const params = new URLSearchParams({
+            order_id: data.orderId ?? "",
+            payment_id: response.razorpay_payment_id,
+          });
+          window.location.href = `/checkout/success?${params}`;
+        },
+        modal: {
+          ondismiss: () => {
+            setProcessing(false);
+          },
+        },
+      });
+
+      rzp.open();
+
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+      setProcessing(false);
+    }
   }
 
   return (
@@ -59,24 +168,14 @@ export default function Checkout() {
           </h1>
         </div>
 
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            setProcessing(true);
-            // Razorpay integration placeholder
-            await new Promise((r) => setTimeout(r, 1400));
-            clear();
-            setDone(true);
-            setProcessing(false);
-          }}
-          className="grid gap-16 md:grid-cols-[1fr_440px]"
-        >
+        <form onSubmit={handleSubmit} className="grid gap-16 md:grid-cols-[1fr_440px]">
           {/* Left: details */}
           <div className="space-y-12">
             <Section title="Contact">
               {!user && (
                 <p className="mb-4 text-sm text-muted-foreground">
-                  Have an account? <Link href="/login" className="text-foreground underline">Sign in</Link>
+                  Have an account?{" "}
+                  <Link href="/login" className="text-foreground underline">Sign in</Link>
                 </p>
               )}
               <Field label="Email" name="email" type="email" defaultValue={user?.email} required />
@@ -89,7 +188,7 @@ export default function Checkout() {
                 <Field label="Last name" name="lastName" required />
               </div>
               <Field label="Address line 1" name="address1" required />
-              <Field label="Address line 2" name="address2" />
+              <Field label="Address line 2 (optional)" name="address2" />
               <div className="grid gap-6 md:grid-cols-3">
                 <Field label="City" name="city" required />
                 <Field label="State" name="state" required />
@@ -101,7 +200,7 @@ export default function Checkout() {
               <div className="rounded-sm border border-border/60 bg-card p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="leading-relaxed">Individually poured and numbered in our small-batch Pune studio.</div>
+                    <div className="leading-relaxed">Secure checkout via Razorpay</div>
                     <div className="mt-1 text-sm text-muted-foreground">
                       UPI · Cards · Net Banking · Wallets
                     </div>
@@ -111,10 +210,16 @@ export default function Checkout() {
                   </div>
                 </div>
                 <p className="mt-4 text-xs text-muted-foreground">
-                  You'll be redirected to Razorpay's secure checkout to complete payment in INR.
+                  You&apos;ll be prompted to pay ₹{total.toLocaleString("en-IN")} via Razorpay&apos;s secure checkout.
                 </p>
               </div>
             </Section>
+
+            {error && (
+              <div className="rounded-sm border border-destructive/50 bg-destructive/5 p-4 text-sm text-destructive">
+                {error}
+              </div>
+            )}
           </div>
 
           {/* Right: order summary */}
@@ -125,13 +230,17 @@ export default function Checkout() {
                 {items.map((item) => (
                   <li key={item.id} className="flex gap-4 py-4">
                     <div className="relative h-20 w-16 flex-none overflow-hidden bg-muted">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                        sizes="64px"
-                      />
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                          sizes="64px"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-muted" />
+                      )}
                     </div>
                     <div className="flex flex-1 flex-col">
                       <div className="font-display text-lg font-light">{item.name}</div>
@@ -148,10 +257,10 @@ export default function Checkout() {
 
               <div className="mt-6 space-y-2 border-t border-border/60 pt-6 text-sm">
                 <Row label="Subtotal" value={formatINR(subtotal)} />
-                <Row
-                  label="Shipping"
-                  value={shipping === 0 ? "Free" : formatINR(shipping)}
-                />
+                <Row label="Shipping" value={shipping === 0 ? "Free" : formatINR(shipping)} />
+                {shipping === 0 && subtotal > 0 && (
+                  <div className="text-xs text-accent">✓ Free shipping on orders above ₹3,000</div>
+                )}
                 <div className="mt-3 border-t border-border/60 pt-3">
                   <Row label="Total" value={formatINR(total)} bold />
                 </div>
@@ -162,10 +271,11 @@ export default function Checkout() {
                 disabled={processing}
                 className="mt-6 w-full bg-foreground py-4 text-sm tracking-wider text-background transition-colors hover:bg-accent disabled:opacity-60"
               >
-                {processing ? "PROCESSING…" : `PAY ${formatINR(total)}`}
+                {processing ? "OPENING PAYMENT…" : `PAY ${formatINR(total)}`}
               </button>
               <p className="mt-3 text-center text-xs text-muted-foreground">
-                By placing this order you agree to our terms.
+                By placing this order you agree to our{" "}
+                <Link href="/terms" className="underline">terms</Link>.
               </p>
             </div>
           </aside>
@@ -185,17 +295,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function Field({
-  label,
-  name,
-  type = "text",
-  required,
-  defaultValue,
+  label, name, type = "text", required, defaultValue,
 }: {
-  label: string;
-  name: string;
-  type?: string;
-  required?: boolean;
-  defaultValue?: string;
+  label: string; name: string; type?: string; required?: boolean; defaultValue?: string;
 }) {
   return (
     <div>
