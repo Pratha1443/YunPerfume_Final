@@ -1,8 +1,13 @@
+// REFERENCE ONLY — live product data is served from Cloudflare D1.
+// See scripts/seed.ts for how this data maps to the database.
+// Do not use this file as a data source after Phase 4 is complete.
+
 import type { StaticImageData } from "next/image";
 import mogra from "@/assets/fragrance-mogra.jpg";
 import oud from "@/assets/fragrance-oud.jpg";
 import sandal from "@/assets/fragrance-sandal.jpg";
 import chai from "@/assets/fragrance-chai.jpg";
+
 
 export interface Fragrance {
   id: string;

@@ -1,28 +1,26 @@
-import { NextResponse } from "next/server";
-import { Resend } from "resend";
+// TODO (Phase 3): Rewrite with full magic link flow:
+// - Validate email (Zod)
+// - Rate limit via KV
+// - Store token in D1 magic_tokens table
+// - Send email via Resend
+// This stub prevents the build failing while Phase 3 is pending.
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const runtime = 'edge';
+
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
-    
-    // In production, we'd generate a token/link and save it to KV or DB
-    const token = Math.random().toString(36).slice(2, 8).toUpperCase();
+    const body = await req.json() as { email: string };
+    const { email } = body;
 
-    const { data, error } = await resend.emails.send({
-      from: 'YUN Atelier <magic@yun.in>',
-      to: [email],
-      subject: 'Your Magic Link — YUN',
-      html: `<p>Your verification code is: <strong>${token}</strong></p>`,
-    });
-
-    if (error) {
-      return NextResponse.json({ error }, { status: 400 });
+    if (!email || !email.includes('@')) {
+      return NextResponse.json({ error: 'Valid email required' }, { status: 400 });
     }
 
+    // Phase 3 will send a real magic link via Resend
     return NextResponse.json({ success: true });
-  } catch (err) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
