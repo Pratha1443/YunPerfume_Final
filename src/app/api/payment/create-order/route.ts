@@ -17,7 +17,8 @@ export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
-import { getDb, orders, orderItems } from '@/db';
+import { getDb, orders, orderItems, products } from '@/db';
+import { eq } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 
 interface CartItem {
@@ -48,11 +49,44 @@ export async function POST(req: Request) {
     const { env } = getRequestContext();
     const body = await req.json() as OrderBody;
 
-    const { amount, email, phone, name, address, items } = body;
+    const { email, phone, name, address, items } = body;
 
-    if (!amount || !email || !items?.length) {
+    if (!email || !items?.length) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
+
+    const db = getDb(env.DB);
+
+    // Calculate amount server-side
+    let calculatedAmountPaise = 0;
+    const validatedItems = [];
+
+    for (const item of items) {
+      // Split off size label if productId contains it (e.g., prod_mogra_noir-50 ml)
+      // Actually, productId in cart might just be the DB id if we adjusted it, 
+      // but let's assume item.productId is something we can use or we find the product.
+      const baseProdId = item.productId.split('-')[0];
+      const prod = await db.select().from(products).where(eq(products.id, baseProdId)).get();
+      
+      if (!prod) {
+        return NextResponse.json({ error: `Product not found: ${baseProdId}` }, { status: 400 });
+      }
+
+      // Calculate price based on size multiplier
+      let multiplier = 1;
+      if (item.size.includes('10 ml')) multiplier = 0.35;
+      else if (item.size.includes('100 ml')) multiplier = 1.75;
+      
+      const unitPricePaise = Math.round(prod.price * multiplier);
+      calculatedAmountPaise += unitPricePaise * item.quantity;
+      
+      validatedItems.push({
+        ...item,
+        unitPricePaise,
+      });
+    }
+
+    const amount = calculatedAmountPaise;
 
     // 1. Create Razorpay order via REST API
     const rzpKeyId = env.RAZORPAY_KEY_ID;
@@ -100,7 +134,7 @@ export async function POST(req: Request) {
     });
 
     // 3. Insert order items (productId required by schema)
-    for (const item of items) {
+    for (const item of validatedItems) {
       await db.insert(orderItems).values({
         id: `oi_${nanoid(10)}`,
         orderId,
@@ -108,7 +142,7 @@ export async function POST(req: Request) {
         productName: item.name,
         productSize: item.size,
         quantity: item.quantity,
-        unitPrice: item.price * 100,  // convert to paise
+        unitPrice: item.unitPricePaise,
       });
     }
 
