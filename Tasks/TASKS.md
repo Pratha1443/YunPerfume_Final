@@ -16,41 +16,41 @@
 > Branch: `phase-0-infra`
 
 ### 0.1 Replace Prisma + Neon with Drizzle + D1
-- [ ] `bun add drizzle-orm && bun add -d drizzle-kit`
-- [ ] `bun remove prisma @prisma/client @prisma/adapter-neon @neondatabase/serverless`
-- [ ] Delete `prisma/` folder (keep `schema.prisma` as reference)
-- [ ] Delete `src/lib/db.ts`
-- [ ] Remove `DATABASE_URL` from `.env`
+- [x] `bun add drizzle-orm && bun add -d drizzle-kit`
+- [x] `bun remove prisma @prisma/client @prisma/adapter-neon @neondatabase/serverless`
+- [x] Delete `prisma/` folder (keep `schema.prisma` as reference)
+- [x] Delete `src/lib/db.ts`
+- [x] Remove `DATABASE_URL` from `.env`
 
 ### 0.2 Install remaining dependencies
-- [ ] `bun add @cloudflare/next-on-pages razorpay resend zod jose nanoid`
-- [ ] `bun add -d wrangler`
+- [x] `bun add @cloudflare/next-on-pages razorpay resend zod jose nanoid`
+- [x] `bun add -d wrangler`
 
 ### 0.3 Fix wrangler config
-- [ ] Delete `wrangler.jsonc`
-- [ ] Create `wrangler.toml` with D1, R2, KV bindings and correct `pages_build_output_dir`
+- [x] Delete `wrangler.jsonc`
+- [x] Create `wrangler.toml` with D1, R2, KV bindings and correct `pages_build_output_dir`
 
 ### 0.4 Fix next.config
-- [ ] Add `setupDevPlatform()` for Cloudflare local dev
-- [ ] Add R2 remote patterns to `images.remotePatterns`
+- [x] Add `setupDevPlatform()` for Cloudflare local dev
+- [x] Add R2 remote patterns to `images.remotePatterns`
 
 ### 0.5 Fix package.json scripts
-- [ ] Add `pages:build`, `deploy`, `db:generate`, `db:migrate:local`, `db:migrate:remote`, `db:studio`, `db:seed`
+- [x] Add `pages:build`, `deploy`, `db:generate`, `db:migrate:local`, `db:migrate:remote`, `db:studio`, `db:seed`
 
 ### 0.6 Fix .env.local
-- [ ] Rename `.env` → `.env.local`
-- [ ] Add `JWT_SECRET`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_R2_PUBLIC_URL`
-- [ ] Remove `DATABASE_URL`
-- [ ] Confirm `.env.local` in `.gitignore`
-- [ ] Create `.env.example` with all keys but empty values
+- [x] Rename `.env` → `.env.local`
+- [x] Add `JWT_SECRET`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_R2_PUBLIC_URL`
+- [x] Remove `DATABASE_URL`
+- [x] Confirm `.env.local` in `.gitignore`
+- [x] Create `.env.example` with all keys but empty values
 
 ### 0.7 Add Cloudflare runtime to all API routes
-- [ ] `export const runtime = 'edge'` in `api/auth/magic-link/route.ts`
-- [ ] `export const runtime = 'edge'` in `api/payment/create-order/route.ts`
+- [x] `export const runtime = 'edge'` in `api/auth/magic-link/route.ts`
+- [x] `export const runtime = 'edge'` in `api/payment/create-order/route.ts`
 
 ### 0.8 Fix the shop page Server Component bug
-- [ ] Remove unused `useCart` import from `src/app/shop/page.tsx` (line 5)
-- [ ] Confirm no client hooks in that file
+- [x] Remove unused `useCart` import from `src/app/shop/page.tsx` (line 5)
+- [x] Confirm no client hooks in that file
 
 ---
 
@@ -58,40 +58,40 @@
 > Branch: `phase-1-database`
 
 ### 1.1 Create folder structure
-- [ ] Create `src/db/schema.ts`
-- [ ] Create `src/db/index.ts`
-- [ ] Create `drizzle.config.ts`
+- [x] Create `src/db/schema.ts`
+- [x] Create `src/db/index.ts`
+- [x] Create `drizzle.config.ts`
 
 ### 1.2 Write schema
-- [ ] `users` table — id, email, name, role, createdAt, lastLoginAt
-- [ ] `collections` table — id, slug, name, description, createdAt
-- [ ] `products` table — id, slug, name, tagline, description, price (paise), stock, active, imageUrl, images (JSON), collectionId, scentFamily, scentNotes (JSON), concentration, size, isDiscoverySet, createdAt, updatedAt
-- [ ] `magic_tokens` table — id, email, token, expiresAt, usedAt, createdAt
-- [ ] `orders` table — id, userId, email, status, totalAmount, razorpayOrderId, razorpayPaymentId, shippingAddress (JSON), createdAt, paidAt
-- [ ] `order_items` table — id, orderId, productId, productName, quantity, unitPrice
+- [x] `users` table — id, email, name, role, createdAt, lastLoginAt
+- [x] `collections` table — id, slug, name, description, createdAt
+- [x] `products` table — id, slug, name, tagline, description, price (paise), stock, active, imageUrl, images (JSON), collectionId, scentFamily, scentNotes (JSON), concentration, size, isDiscoverySet, createdAt, updatedAt
+- [x] `magic_tokens` table — id, email, token, expiresAt, usedAt, createdAt
+- [x] `orders` table — id, userId, email, status, totalAmount, razorpayOrderId, razorpayPaymentId, shippingAddress (JSON), createdAt, paidAt
+- [x] `order_items` table — id, orderId, productId, productName, quantity, unitPrice
 
 ### 1.3 DB connection helper
-- [ ] `src/db/index.ts` — `getDb(d1: D1Database)` using `drizzle-orm/d1`
+- [x] `src/db/index.ts` — `getDb(d1: D1Database)` using `drizzle-orm/d1`
 
 ### 1.4 Drizzle config
-- [ ] `drizzle.config.ts` — dialect: sqlite, driver: d1-http
+- [x] `drizzle.config.ts` — dialect: sqlite, driver: d1-http
 
 ### 1.5 Generate & apply migrations
-- [ ] `bun run db:generate`
-- [ ] `wrangler d1 create yun-perfume-db`
-- [ ] Paste `database_id` into `wrangler.toml`
-- [ ] `bun run db:migrate:local`
-- [ ] Verify tables exist
+- [x] `bun run db:generate`
+- [x] `wrangler d1 create yun-perfume-db`
+- [x] Paste `database_id` into `wrangler.toml`
+- [x] `bun run db:migrate:local`
+- [x] Verify tables exist
 
 ### 1.6 Seed the database
-- [ ] Create `scripts/seed.ts` with all 4 products + 1 collection + 1 ADMIN user
-- [ ] `bun run db:seed`
-- [ ] Verify products in D1
+- [x] Create `scripts/seed.ts` with all 4 products + 1 collection + 1 ADMIN user
+- [x] `bun run db:seed`
+- [x] Verify products in D1
 
 ### 1.7 Update admin dashboard to Drizzle
-- [ ] Replace Prisma imports with `getDb`, `products`, `orders` from `@/db`
-- [ ] Add `export const runtime = 'edge'`
-- [ ] Rewrite queries with Drizzle syntax
+- [x] Replace Prisma imports with `getDb`, `products`, `orders` from `@/db`
+- [x] Add `export const runtime = 'edge'`
+- [x] Rewrite queries with Drizzle syntax
 
 ---
 
@@ -99,38 +99,38 @@
 > Branch: `phase-2-cloudflare`
 
 ### 2.1 D1
-- [ ] `database_id` confirmed in `wrangler.toml`
-- [ ] Local migrations applied
+- [x] `database_id` confirmed in `wrangler.toml`
+- [x] Local migrations applied
 
 ### 2.2 R2 bucket
-- [ ] `wrangler r2 bucket create yun-perfume-images`
-- [ ] Enable public access in Cloudflare dashboard
-- [ ] Copy public URL → set `NEXT_PUBLIC_R2_PUBLIC_URL`
+- [x] `wrangler r2 bucket create yun-perfume-images`
+- [x] Enable public access in Cloudflare dashboard
+- [x] Copy public URL → set `NEXT_PUBLIC_R2_PUBLIC_URL`
 
 ### 2.3 KV namespace
-- [ ] `wrangler kv namespace create SESSIONS`
-- [ ] `wrangler kv namespace create SESSIONS --preview`
-- [ ] Paste both IDs into `wrangler.toml`
+- [x] `wrangler kv namespace create SESSIONS`
+- [x] `wrangler kv namespace create SESSIONS --preview`
+- [x] Paste both IDs into `wrangler.toml`
 
 ### 2.4 Store production secrets
 - [ ] `wrangler secret put RAZORPAY_KEY_ID`
 - [ ] `wrangler secret put RAZORPAY_KEY_SECRET`
 - [ ] `wrangler secret put RAZORPAY_WEBHOOK_SECRET`
 - [ ] `wrangler secret put NEXT_PUBLIC_RAZORPAY_KEY_ID`
-- [ ] `wrangler secret put RESEND_API_KEY`
-- [ ] `wrangler secret put JWT_SECRET`
+- [x] `wrangler secret put RESEND_API_KEY`
+- [x] `wrangler secret put JWT_SECRET`
 - [ ] `wrangler secret put NEXT_PUBLIC_APP_URL`
 - [ ] `wrangler secret put NEXT_PUBLIC_R2_PUBLIC_URL`
 
 ### 2.5 Connect GitHub to Cloudflare Pages
-- [ ] Dashboard → Pages → Connect Git → select repo
-- [ ] Build command: `bun run pages:build`
-- [ ] Output dir: `.vercel/output/static`
-- [ ] Node version: `20`
+- [x] Dashboard → Pages → Connect Git → select repo
+- [x] Build command: `bun run pages:build`
+- [x] Output dir: `.vercel/output/static`
+- [x] Node version: `20`
 
 ### 2.6 Custom domain
-- [ ] Add `yunperfume.com` to Pages project
-- [ ] Confirm SSL active
+- [x] Add `yunperfume.com` to Pages project
+- [x] Confirm SSL active
 
 ---
 
@@ -138,30 +138,30 @@
 > Branch: `phase-3-auth`
 
 ### 3.1 Create auth utilities
-- [ ] `src/lib/auth.ts` — `createSessionToken`, `verifySessionToken`, `generateMagicToken`, `getMagicTokenExpiry`
+- [x] `src/lib/auth.ts` — `createSessionToken`, `verifySessionToken`, `generateMagicToken`, `getMagicTokenExpiry`
 
 ### 3.2 Create session helper
-- [ ] `src/lib/session.ts` — `getSession`, `requireSession`, `requireAdmin`
+- [x] `src/lib/session.ts` — `getSession`, `requireSession`, `requireAdmin`
 
 ### 3.3 Rewrite magic-link API route
-- [ ] `POST /api/auth/magic-link/route.ts` — validate email (Zod), rate limit (KV), upsert user (D1), store token in `magic_tokens` (D1), send email (Resend)
+- [x] `POST /api/auth/magic-link/route.ts` — validate email (Zod), rate limit (KV), upsert user (D1), store token in `magic_tokens` (D1), send email (Resend)
 
 ### 3.4 Create verify route (new)
-- [ ] `GET /api/auth/verify/route.ts` — validate token from D1, mark used, set `yun_session` cookie (HttpOnly, Secure, SameSite:lax, 30d), redirect by role
+- [x] `GET /api/auth/verify/route.ts` — validate token from D1, mark used, set `yun_session` cookie (HttpOnly, Secure, SameSite:lax, 30d), redirect by role
 
 ### 3.5 Create signout route (new)
-- [ ] `POST /api/auth/signout/route.ts` — delete `yun_session` cookie
+- [x] `POST /api/auth/signout/route.ts` — delete `yun_session` cookie
 
 ### 3.6 Update auth-store.tsx
-- [ ] `sendMagicLink()` — real `fetch('/api/auth/magic-link', ...)`
-- [ ] Remove `verify()` and all sessionStorage/localStorage token logic
+- [x] `sendMagicLink()` — real `fetch('/api/auth/magic-link', ...)`
+- [x] Remove `verify()` and all sessionStorage/localStorage token logic
 
 ### 3.7 Update login page
-- [ ] Remove OTP code input step — link in email IS verification
-- [ ] Handle `?error=invalid` and `?error=expired` query params
+- [x] Remove OTP code input step — link in email IS verification
+- [x] Handle `?error=invalid` and `?error=expired` query params
 
 ### 3.8 Route protection middleware
-- [ ] `src/middleware.ts` — protect `/admin/*` (ADMIN only) and `/profile/*` (any session)
+- [x] `src/middleware.ts` — protect `/admin/*` (ADMIN only) and `/profile/*` (any session)
 
 ---
 
@@ -169,25 +169,25 @@
 > Branch: `phase-4-products`
 
 ### 4.1 Mark fragrances.ts as reference-only
-- [ ] Add comment: `// Reference only — live data from D1`
+- [x] Add comment: `// Reference only — live data from D1`
 
 ### 4.2 Create Products API
-- [ ] `GET /api/products/route.ts` — all active products from D1
-- [ ] `GET /api/products/[slug]/route.ts` — single product or 404
+- [x] `GET /api/products/route.ts` — all active products from D1
+- [x] `GET /api/products/[slug]/route.ts` — single product or 404
 
 ### 4.3 Update shop page
-- [ ] Remove `fragrances` import and `useCart` import (bug)
-- [ ] Fetch from `GET /api/products` server-side
-- [ ] Map D1 fields to existing UI props (paise → INR, JSON strings → objects)
+- [x] Remove `fragrances` import and `useCart` import (bug)
+- [x] Fetch from `GET /api/products` server-side
+- [x] Map D1 fields to existing UI props (paise → INR, JSON strings → objects)
 
 ### 4.4 Update product detail page
-- [ ] Fetch from `GET /api/products/${slug}`
-- [ ] Add `generateStaticParams()` for all 4 slugs
-- [ ] Parse `scentNotes` and `images` JSON
-- [ ] Price: `product.price / 100` for INR display
+- [x] Fetch from `GET /api/products/${slug}`
+- [x] Add `generateStaticParams()` for all 4 slugs
+- [x] Parse `scentNotes` and `images` JSON
+- [x] Price: `product.price / 100` for INR display
 
 ### 4.5 Fix cart price handling
-- [ ] When adding to cart: `price: product.price / 100` (D1 paise → INR for cart)
+- [x] When adding to cart: `price: product.price / 100` (D1 paise → INR for cart)
 
 ---
 
@@ -195,13 +195,13 @@
 > Branch: `phase-5-email`
 
 ### 5.1 Resend client
-- [ ] `src/lib/resend.ts` — `resend` instance, `FROM` constant
+- [x] `src/lib/resend.ts` — `resend` instance, `FROM` constant
 
 ### 5.2 Magic link email template
-- [ ] `src/lib/emails/magic-link.ts` — dark brand-styled HTML email, 15min expiry note
+- [x] `src/lib/emails/magic-link.ts` — dark brand-styled HTML email, 15min expiry note
 
 ### 5.3 Order confirmation email template
-- [ ] `src/lib/emails/order-confirmation.ts` — items table, shipping address, total, dispatch note
+- [x] `src/lib/emails/order-confirmation.ts` — items table, shipping address, total, dispatch note
 
 ### 5.4 Fix contact form
 - [ ] Wire form to `POST /api/contact`
@@ -213,13 +213,13 @@
 > Branch: `phase-6-razorpay`
 
 ### 6.1 Razorpay helper
-- [ ] `src/lib/razorpay.ts` — `razorpay` instance, `verifyWebhookSignature(rawBody, sig)`
+- [x] `src/lib/razorpay.ts` — `razorpay` instance, `verifyWebhookSignature(rawBody, sig)`
 
 ### 6.2 Rewrite create-order API
-- [ ] Validate body with Zod: `{ items, shippingAddress, email }`
-- [ ] **Fetch prices from D1 — never trust client prices**
-- [ ] Validate stock, calculate total server-side (paise), apply GST + shipping
-- [ ] Create Razorpay order, save draft order to D1, return `{ orderId, razorpayOrderId, amount, keyId }`
+- [x] Validate body with Zod: `{ items, shippingAddress, email }`
+- [x] **Fetch prices from D1 — never trust client prices**
+- [x] Validate stock, calculate total server-side (paise), apply GST + shipping
+- [x] Create Razorpay order, save draft order to D1, return `{ orderId, razorpayOrderId, amount, keyId }`
 
 ### 6.3 Create webhook handler (new — was completely missing)
 - [ ] `POST /api/payment/webhook/route.ts`
@@ -230,16 +230,16 @@
 - [ ] Always return 200 to Razorpay
 
 ### 6.4 Fix checkout page
-- [ ] Delete fake `setTimeout(1400)` block
-- [ ] Call `POST /api/payment/create-order`
-- [ ] Load Razorpay script dynamically
-- [ ] Open Razorpay modal, handle success/dismiss/error
+- [x] Delete fake `setTimeout(1400)` block
+- [x] Call `POST /api/payment/create-order`
+- [x] Load Razorpay script dynamically
+- [x] Open Razorpay modal, handle success/dismiss/error
 
 ### 6.5 Create order success page (new)
-- [ ] `src/app/order/[id]/page.tsx` — poll status every 2s, show PENDING/PAID/FAILED states
+- [x] `src/app/order/[id]/page.tsx` — poll status every 2s, show PENDING/PAID/FAILED states
 
 ### 6.6 Create order status API (new)
-- [ ] `GET /api/orders/[id]/status/route.ts` — return `{ status }` for order
+- [x] `GET /api/orders/[id]/status/route.ts` — return `{ status }` for order
 
 ### 6.7 Configure Razorpay webhook in dashboard
 - [ ] URL: `https://yunperfume.com/api/payment/webhook`
@@ -252,13 +252,13 @@
 > Branch: `phase-7-profile`
 
 ### 7.1 Create orders list API
-- [ ] `GET /api/orders/route.ts` — session required, return user's orders from D1
+- [x] `GET /api/orders/route.ts` — session required, return user's orders from D1
 
 ### 7.2 Rewrite profile page
-- [ ] `requireSession()` → redirect to `/login` if null
-- [ ] Show real user email from session
-- [ ] Real order history from D1
-- [ ] Sign out button → `POST /api/auth/signout`
+- [x] `requireSession()` → redirect to `/login` if null
+- [x] Show real user email from session
+- [x] Real order history from D1
+- [x] Sign out button → `POST /api/auth/signout`
 
 ---
 
@@ -266,16 +266,16 @@
 > Branch: `phase-8-admin`
 
 ### 8.1 Verify middleware protection
-- [ ] Test: no session → `/login`
-- [ ] Test: USER role → `/login`
-- [ ] Test: ADMIN role → dashboard loads
+- [x] Test: no session → `/login`
+- [x] Test: USER role → `/login`
+- [x] Test: ADMIN role → dashboard loads
 
 ### 8.2 Admin layout server-side guard
-- [ ] `requireAdmin()` in layout — redirect if null
-- [ ] Add sidebar: Dashboard, Products, Orders, Collections
+- [x] `requireAdmin()` in layout — redirect if null
+- [x] Add sidebar: Dashboard, Products, Orders, Collections
 
 ### 8.3 Admin API auth helper
-- [ ] `src/lib/admin-auth.ts` — `requireAdminFromRequest(req: NextRequest)`
+- [x] `src/lib/admin-auth.ts` — `requireAdminFromRequest(req: NextRequest)`
 
 ### 8.4 Products list page
 - [ ] `/admin/products/page.tsx` — table: thumbnail, name, price, stock, active, edit link
@@ -287,11 +287,11 @@
 - [ ] `PATCH /api/admin/products/[id]/route.ts`
 
 ### 8.6 Orders list page
-- [ ] `/admin/orders/page.tsx` — table with status filter
+- [x] `/admin/orders/page.tsx` — table with status filter
 
 ### 8.7 Order detail + status update
-- [ ] `/admin/orders/[id]/page.tsx`
-- [ ] `PATCH /api/admin/orders/[id]/route.ts`
+- [x] `/admin/orders/[id]/page.tsx`
+- [x] `PATCH /api/admin/orders/[id]/route.ts`
 
 ### 8.8 Collections page
 - [ ] `/admin/collections/page.tsx`
