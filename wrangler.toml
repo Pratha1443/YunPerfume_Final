@@ -6,7 +6,7 @@ pages_build_output_dir = ".vercel/output/static"
 [[d1_databases]]
 binding = "DB"
 database_name = "yun-perfume-db"
-database_id = "REPLACE_AFTER_PHASE_1"
+database_id = "38486c9d-3e6b-42c3-9d05-c9e8030d266f"
 
 [[r2_buckets]]
 binding = "IMAGES"
@@ -14,8 +14,8 @@ bucket_name = "yun-perfume-images"
 
 [[kv_namespaces]]
 binding = "SESSIONS"
-id = "REPLACE_AFTER_PHASE_2"
-preview_id = "REPLACE_AFTER_PHASE_2"
+id = "ce3be4882b6d4608956ed54d6b76b2ab"
+preview_id = "5e6e17b784d34af58dec1688e3ac8f98"
 
 [vars]
 NODE_ENV = "production"
