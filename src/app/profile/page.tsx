@@ -32,9 +32,16 @@ export default async function ProfilePage() {
     redirect('/login?redirect=/profile');
   }
 
-  // ── Fetch orders from D1 ─────────────────────────────────────────────────────
+  // ── Fetch data from D1 ─────────────────────────────────────────────────────
   const { env } = getRequestContext();
   const db = getDb(env.DB);
+
+  // Fetch user record
+  const userRecord = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .get();
 
   const userOrders = await db
     .select()
@@ -66,7 +73,8 @@ export default async function ProfilePage() {
       .all();
   }
 
-  const displayName = userEmail.split('@')[0];
+  const displayName = userRecord?.name || userEmail.split('@')[0];
+  const isAdmin = userRecord?.role === 'ADMIN';
 
   return (
     <div className="bg-transparent noise min-h-screen pt-32 pb-32 md:pt-40">
@@ -78,8 +86,20 @@ export default async function ProfilePage() {
             <div className="sticky top-32 space-y-8">
               <div>
                 <div className="eyebrow text-muted-foreground mb-4">Account</div>
-                <h1 className="h-display text-5xl font-light capitalize">{displayName}</h1>
-                <p className="text-muted-foreground mt-3 text-sm break-all">{userEmail}</p>
+                <h1 className="h-display text-4xl md:text-5xl font-light tracking-tight leading-tight break-words max-w-full">
+                  {displayName}
+                </h1>
+                <p className="text-muted-foreground mt-3 text-sm break-all opacity-60">
+                  {userEmail}
+                </p>
+                {isAdmin && (
+                  <Link 
+                    href="/admin" 
+                    className="inline-block mt-4 text-[10px] eyebrow bg-accent/10 text-accent px-3 py-1 rounded-full border border-accent/20 hover:bg-accent/20 transition-colors"
+                  >
+                    Admin Dashboard
+                  </Link>
+                )}
               </div>
 
               <div className="hairline" />
