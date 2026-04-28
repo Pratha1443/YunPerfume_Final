@@ -1,58 +1,113 @@
-// TODO (Phase 7): Replace stub with real session + Drizzle queries
-// This page will call requireSession() and fetch real orders from D1.
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getDb, orders, orderItems } from '@/db';
+import { eq, desc } from 'drizzle-orm';
+import { formatINR } from '@/lib/utils';
+import Link from 'next/link';
+import { Clock, Box, LogOut } from 'lucide-react';
 
-import { formatINR } from "@/lib/utils";
-import Link from "next/link";
-import { ShoppingBag, Box, Clock } from "lucide-react";
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
-export const dynamic = "force-dynamic";
-export const runtime = "edge";
+// ─── Status badge colours ──────────────────────────────────────────────────────
 
-// ─── Temporary stub until Phase 7 wires real auth + Drizzle ─────────────────
-// Returns null user and empty orders — middleware will redirect unauthenticated
-// visitors to /login before this page renders anyway (Phase 3).
+const STATUS_STYLES: Record<string, string> = {
+  PAID:      'bg-emerald-500/10 text-emerald-400',
+  PENDING:   'bg-amber-500/10 text-amber-400',
+  SHIPPED:   'bg-blue-500/10 text-blue-400',
+  DELIVERED: 'bg-green-500/10 text-green-400',
+  CANCELLED: 'bg-red-500/10 text-red-400',
+  FAILED:    'bg-red-500/10 text-red-400',
+};
 
 export default async function ProfilePage() {
-  // Stub — will be replaced in Phase 7 with:
-  //   const session = await requireSession(); // redirect if null
-  //   const user = await db.select().from(users).where(eq(users.id, session.userId))
-  //   const orders = await db.select().from(orders).where(eq(orders.userId, session.userId))
-  const userEmail = "—";
-  const userOrders: { id: string; totalAmount: number; status: string; createdAt: string }[] = [];
+  // Middleware sets these headers from the verified JWT
+  const headersList = await headers();
+  const userId = headersList.get('x-user-id');
+  const userEmail = headersList.get('x-user-email');
+
+  // If middleware didn't set headers (shouldn't happen), redirect to login
+  if (!userId || !userEmail) {
+    redirect('/login?redirect=/profile');
+  }
+
+  // ── Fetch orders from D1 ─────────────────────────────────────────────────────
+  const { env } = getRequestContext();
+  const db = getDb(env.DB);
+
+  const userOrders = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.email, userEmail))
+    .orderBy(desc(orders.createdAt))
+    .all();
+
+  // Fetch order items for all orders in one query set
+  const orderIds = userOrders.map((o) => o.id);
+  const allItems = orderIds.length > 0
+    ? await db
+        .select()
+        .from(orderItems)
+        .where(
+          // Drizzle doesn't have inArray for SQLite text — use multiple queries batched
+          eq(orderItems.orderId, orderIds[0]) // simplified; full implementation below
+        )
+        .all()
+    : [];
+
+  // For multiple orders, fetch items individually (D1 doesn't support IN easily with Drizzle)
+  const itemsByOrder: Record<string, typeof allItems> = {};
+  for (const orderId of orderIds) {
+    itemsByOrder[orderId] = await db
+      .select()
+      .from(orderItems)
+      .where(eq(orderItems.orderId, orderId))
+      .all();
+  }
+
+  const displayName = userEmail.split('@')[0];
 
   return (
     <div className="bg-transparent noise min-h-screen pt-32 pb-32 md:pt-40">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="flex flex-col gap-12 md:flex-row">
-          {/* Sidebar */}
-          <aside className="md:w-1/3">
+
+          {/* ── Sidebar ─────────────────────────────────────────────────────── */}
+          <aside className="md:w-72 shrink-0">
             <div className="sticky top-32 space-y-8">
               <div>
                 <div className="eyebrow text-muted-foreground mb-4">Account</div>
-                <h1 className="h-display text-5xl font-light">Profile</h1>
-                <p className="text-muted-foreground mt-2 text-sm">{userEmail}</p>
+                <h1 className="h-display text-5xl font-light capitalize">{displayName}</h1>
+                <p className="text-muted-foreground mt-3 text-sm break-all">{userEmail}</p>
               </div>
-              <nav className="flex flex-col gap-4 pt-8">
+
+              <div className="hairline" />
+
+              <nav className="flex flex-col gap-5">
                 <Link
                   href="/profile"
-                  className="text-foreground transition-colors hover:text-accent flex items-center gap-3"
+                  className="text-foreground transition-colors hover:text-accent flex items-center gap-3 text-sm"
                 >
                   <Clock className="w-4 h-4 stroke-[1.5px]" />
                   Order History
+                  <span className="ml-auto font-mono text-xs text-muted-foreground">
+                    {userOrders.length}
+                  </span>
                 </Link>
                 <Link
-                  href="/profile/settings"
-                  className="text-muted-foreground transition-colors hover:text-foreground flex items-center gap-3"
+                  href="/shop"
+                  className="text-muted-foreground transition-colors hover:text-foreground flex items-center gap-3 text-sm"
                 >
                   <Box className="w-4 h-4 stroke-[1.5px]" />
-                  Shipping Addresses
+                  Continue Shopping
                 </Link>
                 <form action="/api/auth/signout" method="POST">
                   <button
                     type="submit"
-                    className="text-muted-foreground transition-colors hover:text-destructive flex items-center gap-3 text-left"
+                    className="text-muted-foreground transition-colors hover:text-destructive flex items-center gap-3 text-sm text-left w-full"
                   >
-                    <ShoppingBag className="w-4 h-4 stroke-[1.5px]" />
+                    <LogOut className="w-4 h-4 stroke-[1.5px]" />
                     Sign Out
                   </button>
                 </form>
@@ -60,8 +115,8 @@ export default async function ProfilePage() {
             </div>
           </aside>
 
-          {/* Main Content */}
-          <section className="flex-1">
+          {/* ── Main Content ─────────────────────────────────────────────────── */}
+          <section className="flex-1 min-w-0">
             <h2 className="eyebrow text-muted-foreground mb-10">Order History</h2>
 
             {userOrders.length === 0 ? (
@@ -76,43 +131,89 @@ export default async function ProfilePage() {
               </div>
             ) : (
               <div className="space-y-6">
-                {userOrders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="rounded-sm border border-border/60 bg-card p-6 md:p-10"
-                  >
-                    <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border/40 pb-6 mb-6">
-                      <div>
-                        <div className="font-mono text-xs text-muted-foreground mb-1 uppercase">
-                          Order ID
+                {userOrders.map((order) => {
+                  const items = itemsByOrder[order.id] ?? [];
+                  const address = order.shippingAddress
+                    ? (() => {
+                        try { return JSON.parse(order.shippingAddress) as Record<string, string>; }
+                        catch { return null; }
+                      })()
+                    : null;
+
+                  return (
+                    <div
+                      key={order.id}
+                      className="rounded-sm border border-border/60 bg-card p-6 md:p-8"
+                    >
+                      {/* Order header */}
+                      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border/40 pb-6 mb-6">
+                        <div>
+                          <div className="font-mono text-[10px] text-muted-foreground mb-1 uppercase tracking-wider">
+                            Order
+                          </div>
+                          <div className="font-mono text-sm">{order.id}</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {order.createdAt
+                              ? new Date(order.createdAt).toLocaleDateString('en-IN', {
+                                  day: 'numeric', month: 'long', year: 'numeric',
+                                })
+                              : '—'}
+                          </div>
                         </div>
-                        <div className="font-mono">{order.id}</div>
+
+                        <div className="flex items-center gap-6">
+                          <div className="text-right">
+                            <div className="font-mono text-[10px] text-muted-foreground mb-1 uppercase tracking-wider">
+                              Total
+                            </div>
+                            <div className="font-mono text-lg">
+                              {formatINR(order.totalAmount / 100)}
+                            </div>
+                          </div>
+
+                          <div>
+                            <span
+                              className={`eyebrow text-[10px] px-3 py-1 rounded-full ${STATUS_STYLES[order.status] ?? 'bg-muted text-muted-foreground'}`}
+                            >
+                              {order.status}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <div className="font-mono text-xs text-muted-foreground mb-1 uppercase">
-                          Total
+
+                      {/* Order items */}
+                      {items.length > 0 && (
+                        <ul className="space-y-3 mb-6">
+                          {items.map((item) => (
+                            <li key={item.id} className="flex items-center justify-between text-sm">
+                              <div>
+                                <span className="text-foreground">{item.productName}</span>
+                                <span className="text-muted-foreground ml-2">
+                                  · {item.productSize} · Qty {item.quantity}
+                                </span>
+                              </div>
+                              <div className="font-mono text-sm">
+                                {formatINR((item.unitPrice * item.quantity) / 100)}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {/* Shipping address */}
+                      {address && (
+                        <div className="text-xs text-muted-foreground border-t border-border/40 pt-4">
+                          <span className="eyebrow text-[9px] text-foreground/40 uppercase tracking-wider mr-2">
+                            Ship to:
+                          </span>
+                          {[address.name, address.line1, address.city, address.state, address.pin]
+                            .filter(Boolean)
+                            .join(', ')}
                         </div>
-                        <div className="font-mono text-lg">
-                          {formatINR(order.totalAmount / 100)}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-mono text-xs text-muted-foreground mb-1 uppercase">
-                          Status
-                        </div>
-                        <div
-                          className={`eyebrow text-[10px] px-2 py-0.5 rounded-full ${
-                            order.status === "PAID"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-amber-100 text-amber-700"
-                          }`}
-                        >
-                          {order.status}
-                        </div>
-                      </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </section>
