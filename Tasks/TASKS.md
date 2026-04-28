@@ -360,6 +360,7 @@
 - [ ] `/admin` without session → `/login`
 - [ ] `/admin` as USER → `/login`
 - [ ] `/profile` without session → `/login`
+- [x] Run `npm run build` locally to verify no type/build errors
 
 ### 12.2 Shop & cart
 - [ ] All 4 products load from D1 (not `fragrances.ts`)
@@ -401,10 +402,10 @@
 > Branch: `phase-13-deploy`
 
 ### 13.1 Pre-deploy
-- [ ] `bun run db:migrate:remote` — apply migrations to production D1
-- [ ] Seed production D1
+- [x] `bun run db:migrate:remote` — apply migrations to production D1
+- [x] Seed production D1
 - [ ] Upload product images to production R2
-- [ ] `wrangler secret list` — verify all 8 secrets present
+- [x] `wrangler secret list` — verify all 8 secrets present
 - [ ] Switch to live Razorpay keys
 
 ### 13.2 Deploy
