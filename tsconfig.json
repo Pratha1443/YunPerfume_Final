@@ -16,7 +16,8 @@
       "DOM.Iterable"
     ],
     "types": [
-      "node"
+      "node",
+      "@cloudflare/workers-types"
     ],
     /* Bundler mode */
     "moduleResolution": "Bundler",
