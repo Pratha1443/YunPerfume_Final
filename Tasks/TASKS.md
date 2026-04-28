@@ -278,13 +278,13 @@
 - [x] `src/lib/admin-auth.ts` — `requireAdminFromRequest(req: NextRequest)`
 
 ### 8.4 Products list page
-- [ ] `/admin/products/page.tsx` — table: thumbnail, name, price, stock, active, edit link
+- [x] `/admin/products/page.tsx` — table: thumbnail, name, price, stock, active, edit link
 
 ### 8.5 Product create/edit form
-- [ ] `/admin/products/new/page.tsx`
-- [ ] `/admin/products/[id]/edit/page.tsx`
-- [ ] `POST /api/admin/products/route.ts`
-- [ ] `PATCH /api/admin/products/[id]/route.ts`
+- [x] `/admin/products/new/page.tsx`
+- [x] `/admin/products/[id]/edit/page.tsx`
+- [x] `POST /api/admin/products/route.ts`
+- [x] `PATCH /api/admin/products/[id]/route.ts`
 
 ### 8.6 Orders list page
 - [x] `/admin/orders/page.tsx` — table with status filter
