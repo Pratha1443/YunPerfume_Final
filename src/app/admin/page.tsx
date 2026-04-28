@@ -95,11 +95,11 @@ export default async function AdminDashboard() {
             </div>
             <div className="flex justify-between border-b border-border/40 pb-2">
               <span className="text-muted-foreground">Auth (Magic Link)</span>
-              <span className="text-amber-500 font-mono">Phase 3</span>
+              <span className="text-green-500 font-mono">Completed</span>
             </div>
             <div className="flex justify-between pb-2">
               <span className="text-muted-foreground">Payments (Razorpay)</span>
-              <span className="text-amber-500 font-mono">Phase 6</span>
+              <span className="text-green-500 font-mono">Active</span>
             </div>
           </div>
         </section>
