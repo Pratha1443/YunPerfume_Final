@@ -15,6 +15,8 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+.env.local
+.env*.local
 
 # Wrangler / Cloudflare
 .wrangler/
@@ -37,6 +39,5 @@ next-env.d.ts
 
 /src/generated/prisma
 
-# Prisma local dev database
-prisma/dev.db
-prisma/dev.db-journal
+# Drizzle local dev
+.drizzle/
