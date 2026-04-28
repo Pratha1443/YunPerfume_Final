@@ -3,41 +3,59 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "@/lib/auth-store";
 
-export default function Login() {
-  const { user, sendMagicLink, verify, signOut } = useAuth();
+type Stage = "email" | "code" | "done";
+
+export default function LoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
-  const [stage, setStage] = useState<"email" | "code">("email");
   const [code, setCode] = useState("");
-  const [issuedToken, setIssuedToken] = useState<string | null>(null);
+  const [stage, setStage] = useState<Stage>("email");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  if (user) {
-    return (
-      <div className="bg-transparent pt-32 pb-32 md:pt-40">
-        <div className="mx-auto max-w-md px-5 text-center">
-          <div className="eyebrow text-muted-foreground">Welcome back</div>
-          <h1 className="h-display mt-4 text-5xl font-light md:text-6xl">
-            {user.email.split("@")[0]}
-          </h1>
-          <p className="mt-4 text-sm text-muted-foreground">
-            Signed in as <span className="text-foreground">{user.email}</span>
-          </p>
-          <div className="mt-10 flex flex-col gap-3">
-            <Link href="/shop" className="bg-foreground py-4 text-sm tracking-wider text-background hover:bg-accent text-center">
-              CONTINUE SHOPPING
-            </Link>
-            <button onClick={signOut} className="eyebrow py-2 text-muted-foreground hover:text-foreground">
-              Sign out
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+  // Step 1: Send magic link
+  async function handleSendLink(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/magic-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json() as { success?: boolean; error?: string };
+      if (!res.ok) throw new Error(data.error ?? "Failed to send link");
+      setStage("code");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Could not send link. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Step 2: Verify OTP code
+  async function handleVerifyCode(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, token: code }),
+      });
+      const data = await res.json() as { success?: boolean; error?: string };
+      if (!res.ok) throw new Error(data.error ?? "Invalid code");
+      // Session cookie is now set — redirect to profile
+      router.push("/profile");
+      router.refresh();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Verification failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -54,23 +72,7 @@ export default function Login() {
         </div>
 
         {stage === "email" ? (
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setError("");
-              setLoading(true);
-              try {
-                const { token } = await sendMagicLink(email);
-                setIssuedToken(token);
-                setStage("code");
-              } catch {
-                setError("Could not send link. Try again.");
-              } finally {
-                setLoading(false);
-              }
-            }}
-            className="mt-12 space-y-6"
-          >
+          <form onSubmit={handleSendLink} className="mt-12 space-y-6">
             <div>
               <label htmlFor="email" className="eyebrow mb-3 block text-muted-foreground">
                 Email
@@ -85,6 +87,9 @@ export default function Login() {
                 className="w-full border-b border-foreground/30 bg-transparent py-3 font-display text-xl font-light outline-none transition-colors focus:border-foreground"
               />
             </div>
+
+            {error && <div className="text-center text-sm text-destructive">{error}</div>}
+
             <button
               type="submit"
               disabled={loading}
@@ -93,37 +98,15 @@ export default function Login() {
               {loading ? "SENDING…" : "SEND MAGIC LINK"}
             </button>
             <p className="text-center text-xs text-muted-foreground">
-              No password. We'll email you a one-time code.
+              No password. We&apos;ll email you a one-time code.
             </p>
           </form>
         ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setError("");
-              if (verify(email, code)) {
-                router.push("/shop");
-              } else {
-                setError("Invalid code. Please try again.");
-              }
-            }}
-            className="mt-12 space-y-6"
-          >
+          <form onSubmit={handleVerifyCode} className="mt-12 space-y-6">
             <p className="text-center text-sm text-muted-foreground">
-              We sent a 6-character code to <span className="text-foreground">{email}</span>.
+              We sent a 6-character code to{" "}
+              <span className="text-foreground">{email}</span>.
             </p>
-
-            {issuedToken && (
-              <div className="rounded-sm border border-accent/30 bg-accent/5 p-4 text-center">
-                <div className="eyebrow text-accent">Demo mode</div>
-                <div className="mt-2 font-mono text-2xl tracking-[0.4em] text-foreground">
-                  {issuedToken}
-                </div>
-                <div className="mt-2 text-xs text-muted-foreground">
-                  In production this would be emailed via Lovable Cloud.
-                </div>
-              </div>
-            )}
 
             <div>
               <label htmlFor="code" className="eyebrow mb-3 block text-muted-foreground">
@@ -137,6 +120,7 @@ export default function Login() {
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                 placeholder="ABC123"
                 maxLength={6}
+                autoComplete="one-time-code"
                 className="w-full border-b border-foreground/30 bg-transparent py-3 text-center font-mono text-2xl tracking-[0.4em] outline-none transition-colors focus:border-foreground"
               />
             </div>
@@ -145,23 +129,37 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-full bg-foreground py-4 text-sm tracking-wider text-background transition-colors hover:bg-accent"
+              disabled={loading}
+              className="w-full bg-foreground py-4 text-sm tracking-wider text-background transition-colors hover:bg-accent disabled:opacity-50"
             >
-              VERIFY & SIGN IN
+              {loading ? "VERIFYING…" : "VERIFY & SIGN IN"}
             </button>
+
             <button
               type="button"
-              onClick={() => {
-                setStage("email");
-                setCode("");
-                setIssuedToken(null);
-              }}
+              onClick={() => { setStage("email"); setCode(""); setError(""); }}
               className="eyebrow w-full py-2 text-muted-foreground hover:text-foreground"
             >
               ← Use a different email
             </button>
+
+            <button
+              type="button"
+              disabled={loading}
+              onClick={handleSendLink}
+              className="eyebrow w-full py-1 text-xs text-muted-foreground hover:text-foreground"
+            >
+              Resend code
+            </button>
           </form>
         )}
+
+        <div className="mt-16 text-center text-xs text-muted-foreground">
+          By signing in you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-foreground">Terms</Link>
+          {" & "}
+          <Link href="/privacy" className="underline hover:text-foreground">Privacy Policy</Link>.
+        </div>
       </div>
     </div>
   );

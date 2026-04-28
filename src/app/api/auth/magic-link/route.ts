@@ -1,26 +1,105 @@
-// TODO (Phase 3): Rewrite with full magic link flow:
-// - Validate email (Zod)
-// - Rate limit via KV
-// - Store token in D1 magic_tokens table
-// - Send email via Resend
-// This stub prevents the build failing while Phase 3 is pending.
+/**
+ * POST /api/auth/magic-link
+ * Send a magic link / OTP to the user's email.
+ *
+ * Body: { email: string }
+ * Returns: { success: true } | { error: string }
+ */
 
 export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
+import { getRequestContext } from '@cloudflare/next-on-pages';
+import { Resend } from 'resend';
+import { getDb, magicTokens, users } from '@/db';
+import {
+  generateMagicToken,
+  getMagicTokenExpiry,
+  checkRateLimit,
+} from '@/lib/auth';
+import { nanoid } from 'nanoid';
+import { eq } from 'drizzle-orm';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json() as { email: string };
-    const { email } = body;
+    const { env } = getRequestContext();
+    const body = await req.json() as { email?: string };
+    const email = body.email?.toLowerCase().trim();
 
-    if (!email || !email.includes('@')) {
+    // 1. Validate email
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Valid email required' }, { status: 400 });
     }
 
-    // Phase 3 will send a real magic link via Resend
+    // 2. Rate limit via KV
+    const { allowed } = await checkRateLimit(env.SESSIONS, email);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait before requesting another link.' },
+        { status: 429 }
+      );
+    }
+
+    // 3. Upsert user in D1
+    const db = getDb(env.DB);
+    const existing = await db.select().from(users).where(eq(users.email, email)).get();
+    if (!existing) {
+      await db.insert(users).values({
+        id: `user_${nanoid(12)}`,
+        email,
+        role: 'USER',
+      });
+    }
+
+    // 4. Create magic token
+    const token = generateMagicToken();
+    const expiresAt = getMagicTokenExpiry();
+    await db.insert(magicTokens).values({
+      id: `tok_${nanoid(12)}`,
+      email,
+      token,
+      expiresAt,
+    });
+
+    // 5. Send email via Resend
+    const resend = new Resend(env.RESEND_API_KEY);
+    const appUrl = env.NEXT_PUBLIC_APP_URL || 'https://yunperfume.com';
+    const verifyUrl = `${appUrl}/api/auth/verify?token=${token}&email=${encodeURIComponent(email)}`;
+
+    await resend.emails.send({
+      from: 'YUN Atelier <magic@yun.in>',
+      to: [email],
+      subject: 'Sign in to YUN — your code is inside',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: 'Georgia', serif; background: #0a0e1a; color: #e8e0d0; margin: 0; padding: 40px 20px;">
+          <div style="max-width: 480px; margin: 0 auto;">
+            <div style="font-size: 11px; letter-spacing: 0.3em; color: #4a6fa5; text-transform: uppercase; margin-bottom: 32px;">YUN Atelier</div>
+            <h1 style="font-size: 36px; font-weight: 300; margin: 0 0 24px; line-height: 1.2;">Your sign-in code.</h1>
+            <div style="background: #141824; border: 1px solid rgba(255,255,255,0.08); padding: 32px; text-align: center; margin: 32px 0;">
+              <div style="font-family: monospace; font-size: 48px; letter-spacing: 0.3em; color: #4a6fa5;">${token}</div>
+              <div style="font-size: 12px; color: #888; margin-top: 16px;">Valid for ${15} minutes</div>
+            </div>
+            <p style="font-size: 14px; color: #888; line-height: 1.6;">
+              Or click the link below to sign in directly:
+            </p>
+            <a href="${verifyUrl}" style="display: inline-block; background: #4a6fa5; color: #fff; padding: 14px 28px; text-decoration: none; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; margin: 16px 0;">
+              Sign in to YUN
+            </a>
+            <p style="font-size: 12px; color: #555; margin-top: 32px; line-height: 1.6;">
+              If you didn't request this, you can safely ignore it. This link expires in 15 minutes.
+            </p>
+          </div>
+        </body>
+        </html>
+      `,
+    });
+
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  } catch (err) {
+    console.error('[magic-link]', err);
+    return NextResponse.json({ error: 'Failed to send magic link' }, { status: 500 });
   }
 }
