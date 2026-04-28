@@ -1,5 +1,8 @@
+export const runtime = 'edge';
+
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
+
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,
@@ -8,7 +11,8 @@ const razorpay = new Razorpay({
 
 export async function POST(req: Request) {
   try {
-    const { amount, currency = "INR", receipt } = await req.json();
+    const body = await req.json() as { amount: number; currency?: string; receipt?: string };
+    const { amount, currency = "INR", receipt } = body;
 
     const order = await razorpay.orders.create({
       amount: amount, // amount in the smallest currency unit
