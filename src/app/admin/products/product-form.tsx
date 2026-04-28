@@ -13,6 +13,8 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [currentImageUrl, setCurrentImageUrl] = useState(initialData?.imageUrl || "");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,10 +36,10 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
       name: formData.get("name"),
       tagline: formData.get("tagline"),
       description: formData.get("description"),
-      price: Number(formData.get("price")), // UI is INR, API converts to paise
+      price: Number(formData.get("price")),
       stock: Number(formData.get("stock")),
       active: formData.get("active") === "true",
-      imageUrl: formData.get("imageUrl"),
+      imageUrl: currentImageUrl,
       scentFamily: formData.get("scentFamily"),
       concentration: formData.get("concentration"),
       size: formData.get("size"),
@@ -80,6 +82,33 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
         base: (parsed.base || []).join(", "),
       };
     } catch (e) {}
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    setError("");
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json() as any;
+
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+
+      setCurrentImageUrl(data.url);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setUploadingImage(false);
+    }
   }
 
   return (
@@ -133,7 +162,27 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
           </div>
           
           <h2 className="eyebrow text-muted-foreground pt-6">Media</h2>
-          <Field label="Image URL (R2)" name="imageUrl" defaultValue={initialData?.imageUrl} />
+          <div>
+            <label className="eyebrow mb-2 block text-muted-foreground">Product Image (R2)</label>
+            <div className="flex items-center gap-4">
+              {currentImageUrl && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={currentImageUrl} alt="Preview" className="h-16 w-12 object-cover rounded-sm bg-muted" />
+              )}
+              <div className="flex-1">
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg, image/webp"
+                  onChange={handleImageUpload}
+                  disabled={uploadingImage}
+                  className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:bg-foreground file:text-background hover:file:bg-accent transition-colors disabled:opacity-50"
+                />
+                {uploadingImage && <div className="text-xs text-muted-foreground mt-2">Uploading to R2...</div>}
+              </div>
+            </div>
+            {/* Fallback hidden input so it still submits if we want to manually edit, though we use state instead */}
+            <input type="hidden" name="imageUrl" value={currentImageUrl} />
+          </div>
           <Field label="Brand Hue (Hex)" name="hue" defaultValue={initialData?.hue} />
         </div>
       </div>
