@@ -102,15 +102,15 @@ export function HorizontalGallery({ products }: HorizontalGalleryProps) {
               href={`/shop/${f.slug}`}
               className="group relative block h-[65vh] w-[80vw] flex-none md:w-[45vw] lg:w-[35vw]"
             >
-              <div className="relative h-full w-full overflow-hidden bg-foreground/[0.03] rounded-sm">
-                {/* Parallax Container */}
-                <div className="gallery-image absolute inset-[-15%] h-[130%] w-[130%]">
+              <div className="relative h-full w-full overflow-hidden bg-black/60 rounded-sm">
+                {/* Image */}
+                <div className="gallery-image absolute inset-0">
                   {f.imageUrl ? (
                     <Image
                       src={f.imageUrl}
                       alt={f.name}
                       fill
-                      className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                      className="object-contain transition-transform duration-1000 group-hover:scale-105 p-4"
                       sizes="(max-width: 768px) 80vw, 35vw"
                       priority={i === 0}
                     />
