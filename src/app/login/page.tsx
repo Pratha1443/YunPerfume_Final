@@ -1,18 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "@/hooks/use-session";
 
 type Stage = "email" | "code" | "done";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { user, loading: sessionLoading } = useSession();
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [stage, setStage] = useState<Stage>("email");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (user && !sessionLoading) {
+      router.push("/profile");
+    }
+  }, [user, sessionLoading, router]);
 
   // Step 1: Send magic link
   async function handleSendLink(e: React.FormEvent) {

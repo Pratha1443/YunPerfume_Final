@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ShoppingBag, User2, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/hooks/use-session";
 import logo from "@/assets/logo.png";
 
 const NAV = [
@@ -19,6 +20,7 @@ const NAV = [
 
 export function SiteHeader() {
   const { count, setOpen } = useCart();
+  const { user } = useSession();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -72,7 +74,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1 md:gap-2">
                     <Link
-            href="/login"
+            href={user ? "/profile" : "/login"}
             aria-label="Account"
             className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-foreground/5"
           >
