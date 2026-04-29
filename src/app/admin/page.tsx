@@ -91,7 +91,7 @@ export default async function AdminDashboard() {
             </div>
             <div className="flex justify-between border-b border-border/40 pb-2">
               <span className="text-muted-foreground">R2 Storage</span>
-              <span className="text-amber-500 font-mono">Pending setup</span>
+              <span className="text-green-500 font-mono">Connected</span>
             </div>
             <div className="flex justify-between border-b border-border/40 pb-2">
               <span className="text-muted-foreground">Auth (Magic Link)</span>
