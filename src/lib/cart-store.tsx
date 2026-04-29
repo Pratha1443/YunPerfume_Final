@@ -1,7 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { StaticImageData } from "next/image";
 
 export interface CartItem {
@@ -29,30 +28,89 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "yun:cart";
 
+function mergeItems(local: CartItem[], server: CartItem[]): CartItem[] {
+  if (!server.length) return local;
+  if (!local.length) return server;
+  // Merge: server is source of truth, add any local-only items on top
+  const merged = [...server];
+  for (const localItem of local) {
+    const exists = merged.find((s) => s.id === localItem.id);
+    if (!exists) merged.push(localItem);
+  }
+  return merged;
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // ── Step 1: Hydrate from localStorage ──────────────────────────────────────
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setItems(JSON.parse(raw));
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
     setHydrated(true);
   }, []);
 
+  // ── Step 2: After hydration, check session & sync server cart ───────────────
+  useEffect(() => {
+    if (!hydrated) return;
+    let cancelled = false;
+
+    async function syncWithServer() {
+      try {
+        const sessionRes = await fetch("/api/auth/session");
+        if (!sessionRes.ok) return;
+        const session = await sessionRes.json() as any;
+        if (!session?.user?.id) return;
+
+        if (cancelled) return;
+        setIsLoggedIn(true);
+
+        // Fetch server cart
+        const cartRes = await fetch("/api/cart");
+        if (!cartRes.ok) return;
+        const { items: serverItems } = await cartRes.json() as { items: CartItem[] };
+
+        if (cancelled) return;
+        // Merge local + server (server wins for existing items)
+        setItems((local) => mergeItems(local, serverItems));
+      } catch { /* network error — stay local */ }
+    }
+
+    syncWithServer();
+    return () => { cancelled = true; };
+  }, [hydrated]);
+
+  // ── Step 3: Persist to localStorage always ──────────────────────────────────
   useEffect(() => {
     if (!hydrated) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
   }, [items, hydrated]);
+
+  // ── Step 4: Debounced save to server when logged in ─────────────────────────
+  useEffect(() => {
+    if (!hydrated || !isLoggedIn) return;
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      }).catch(() => { /* silent fail */ });
+    }, 800);
+
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, [items, hydrated, isLoggedIn]);
 
   const add = useCallback((item: Omit<CartItem, "quantity">, qty = 1) => {
     setItems((prev) => {
