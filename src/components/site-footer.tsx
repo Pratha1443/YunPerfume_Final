@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "@/hooks/use-session";
 
 export function SiteFooter() {
+  const { user } = useSession();
   return (
     <footer className="border-t border-border/60 bg-transparent">
       <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
@@ -29,7 +31,7 @@ export function SiteFooter() {
             <ul className="space-y-3 text-sm">
               <li><Link href="/atelier" className="hover:text-accent">The Atelier</Link></li>
               <li><Link href="/contact" className="hover:text-accent">Contact</Link></li>
-              <li><Link href="/login" className="hover:text-accent">Account</Link></li>
+              <li><Link href={user ? "/profile" : "/login"} className="hover:text-accent">Account</Link></li>
             </ul>
           </div>
 
