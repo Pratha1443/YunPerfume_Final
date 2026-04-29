@@ -42,6 +42,7 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
       imageUrl: currentImageUrl,
       size: formData.get("size"),
       index: formData.get("index"),
+      isDiscoverySet: formData.get("isDiscoverySet") === "true",
       scentNotes,
     };
 
@@ -147,6 +148,19 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
               <option value="true">Active</option>
               <option value="false">Draft</option>
             </select>
+          </div>
+          <div className="flex items-center gap-3 pt-2">
+            <input
+              type="checkbox"
+              id="isDiscoverySet"
+              name="isDiscoverySet"
+              value="true"
+              defaultChecked={!!initialData?.isDiscoverySet}
+              className="h-4 w-4 accent-accent"
+            />
+            <label htmlFor="isDiscoverySet" className="eyebrow text-muted-foreground text-[11px]">
+              This is a Discovery / Sampler Set
+            </label>
           </div>
 
           <h2 className="eyebrow text-muted-foreground pt-4">Product Image</h2>
