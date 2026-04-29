@@ -88,21 +88,24 @@ export function getSessionFromCookies(cookieHeader: string | null): string | nul
 
 // ─── Rate limiting via KV ─────────────────────────────────────────────────────
 
-const RATE_LIMIT_MAX = 3;     // max 3 magic links per window
-const RATE_LIMIT_WINDOW = 3600; // 1 hour in seconds
+const RATE_LIMIT_MAX = 3;       // max 3 magic links per window for regular users
+const RATE_LIMIT_MAX_ADMIN = 10; // max 10 magic links per window for admins
+const RATE_LIMIT_WINDOW = 3600;  // 1 hour in seconds
 
 export async function checkRateLimit(
   kv: KVNamespace,
-  email: string
+  email: string,
+  isAdmin = false
 ): Promise<{ allowed: boolean; remaining: number }> {
+  const limit = isAdmin ? RATE_LIMIT_MAX_ADMIN : RATE_LIMIT_MAX;
   const key = `rl:magic:${email}`;
   const current = await kv.get(key);
   const count = current ? parseInt(current, 10) : 0;
 
-  if (count >= RATE_LIMIT_MAX) {
+  if (count >= limit) {
     return { allowed: false, remaining: 0 };
   }
 
   await kv.put(key, String(count + 1), { expirationTtl: RATE_LIMIT_WINDOW });
-  return { allowed: true, remaining: RATE_LIMIT_MAX - count - 1 };
+  return { allowed: true, remaining: limit - count - 1 };
 }

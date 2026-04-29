@@ -36,18 +36,21 @@ export async function POST(req: Request) {
     }
     const email = parsed.data.email.toLowerCase().trim();
 
-    // 2. Rate limit via KV
-    const { allowed } = await checkRateLimit(env.SESSIONS, email);
-    if (!allowed) {
-      return NextResponse.json(
-        { error: 'Too many requests. Please wait before requesting another link.' },
-        { status: 429 }
-      );
-    }
-
-    // 3. Upsert user in D1
+    // 2. Check if the user is an admin for a higher rate limit
     const db = getDb(env.DB);
     const existing = await db.select().from(users).where(eq(users.email, email)).get();
+    const isAdmin = existing?.role === 'ADMIN';
+
+    // 3. Rate limit via KV — admins get 10 requests/hr, users get 3
+    const { allowed } = await checkRateLimit(env.SESSIONS, email, isAdmin);
+    if (!allowed) {
+      const waitMsg = isAdmin
+        ? 'Too many requests. Please wait before requesting another link.'
+        : 'Too many requests. Please wait before requesting another link.';
+      return NextResponse.json({ error: waitMsg }, { status: 429 });
+    }
+
+    // 4. Upsert user in D1 (create if new)
     if (!existing) {
       await db.insert(users).values({
         id: `user_${nanoid(12)}`,
