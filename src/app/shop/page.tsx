@@ -11,7 +11,7 @@ import { formatINR } from '@/lib/utils';
 export const metadata: Metadata = {
   title: 'Shop — YUN Atelier',
   description:
-    'Explore the four signature fragrances of YUN. Mogra, oud, sandalwood and chai. Crafted in small batches in India.',
+    'Explore the four signature fragrances of YUN. Crafted in small batches in India.',
   openGraph: {
     title: 'Shop — YUN Atelier',
     description: 'Four signature fragrances from the YUN atelier.',
@@ -22,20 +22,12 @@ export default async function ShopPage() {
   const { env } = getRequestContext();
   const db = getDb(env.DB);
 
-  // Regular fragrances — exclude discovery sets
   const fragrances = await db
     .select()
     .from(products)
     .where(and(eq(products.active, true), eq(products.isDiscoverySet, false)))
     .orderBy(products.index)
     .all();
-
-  // Discovery set — shown separately at the bottom
-  const discoverySet = await db
-    .select()
-    .from(products)
-    .where(and(eq(products.active, true), eq(products.isDiscoverySet, true)))
-    .get();
 
   return (
     <div className="bg-transparent pt-32 pb-32 md:pt-40">
@@ -56,7 +48,6 @@ export default async function ShopPage() {
           </div>
         </div>
 
-        {/* Regular Fragrances Grid */}
         <div className="grid gap-x-8 gap-y-20 md:grid-cols-2">
           {fragrances.map((f, i) => (
             <Link
@@ -64,13 +55,13 @@ export default async function ShopPage() {
               href={`/shop/${f.slug}`}
               className={`group block ${i % 2 === 1 ? 'md:mt-32' : ''}`}
             >
-              <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+              <div className="relative aspect-[4/5] overflow-hidden bg-black/60">
                 {f.imageUrl ? (
                   <Image
                     src={f.imageUrl}
                     alt={f.name}
                     fill
-                    className="object-contain transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05] p-4 bg-black/60"
+                    className="object-contain transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05] p-4"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 ) : (
@@ -95,54 +86,6 @@ export default async function ShopPage() {
             </Link>
           ))}
         </div>
-
-        {/* Discovery Set — separate dedicated section */}
-        {discoverySet && (
-          <section className="mt-40 border-t border-foreground/10 pt-20">
-            <div className="grid gap-12 md:grid-cols-2 md:items-center">
-              {/* Image */}
-              <div className="relative aspect-square overflow-hidden bg-black/60 rounded-sm">
-                {discoverySet.imageUrl ? (
-                  <Image
-                    src={discoverySet.imageUrl}
-                    alt={discoverySet.name}
-                    fill
-                    className="object-contain p-8"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                ) : (
-                  <div className="h-full w-full flex items-center justify-center">
-                    <span className="font-mono text-xs text-foreground/20 tracking-widest">NO IMAGE</span>
-                  </div>
-                )}
-              </div>
-              {/* Info */}
-              <div className="space-y-8">
-                <div>
-                  <div className="eyebrow text-accent mb-4">Begin here</div>
-                  <h2 className="h-display text-5xl font-light md:text-6xl lg:text-7xl">
-                    {discoverySet.name}
-                  </h2>
-                  <p className="mt-6 font-display text-xl italic font-light text-foreground/70 md:text-2xl">
-                    {discoverySet.tagline}
-                  </p>
-                </div>
-                <p className="text-foreground/60 leading-relaxed max-w-md">
-                  {discoverySet.description}
-                </p>
-                <div className="flex items-center gap-8 pt-4">
-                  <span className="font-mono text-3xl">{formatINR(discoverySet.price / 100)}</span>
-                  <Link
-                    href="/shop/discovery-set"
-                    className="bg-foreground px-10 py-4 text-sm tracking-wider text-background hover:bg-accent transition-all"
-                  >
-                    EXPLORE SET
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
       </div>
     </div>
   );
