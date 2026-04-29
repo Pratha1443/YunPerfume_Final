@@ -40,12 +40,8 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
       stock: Number(formData.get("stock")),
       active: formData.get("active") === "true",
       imageUrl: currentImageUrl,
-      scentFamily: formData.get("scentFamily"),
-      concentration: formData.get("concentration"),
       size: formData.get("size"),
-      hue: formData.get("hue"),
       index: formData.get("index"),
-      story: formData.get("story"),
       scentNotes,
     };
 
@@ -60,7 +56,6 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
       });
 
       const result = await res.json() as any;
-
       if (!res.ok) throw new Error(result.error || "Failed to save product");
 
       router.push("/admin/products");
@@ -95,14 +90,9 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
     formData.append("image", file);
 
     try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
       const data = await res.json() as any;
-
       if (!res.ok) throw new Error(data.error || "Upload failed");
-
       setCurrentImageUrl(data.url);
     } catch (err: any) {
       setError(err.message);
@@ -120,30 +110,23 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
       )}
 
       <div className="grid gap-10 md:grid-cols-2">
+        {/* Left — Basic Info */}
         <div className="space-y-6">
-          <h2 className="eyebrow text-muted-foreground">Basic Info</h2>
+          <h2 className="eyebrow text-muted-foreground">Product Info</h2>
           <Field label="Name" name="name" required defaultValue={initialData?.name} />
           <Field label="Tagline" name="tagline" defaultValue={initialData?.tagline} />
           <div>
             <label className="eyebrow mb-2 block text-muted-foreground">Description</label>
             <textarea
               name="description"
-              rows={4}
+              rows={5}
               defaultValue={initialData?.description}
-              className="w-full border border-border/40 bg-card p-3 text-sm outline-none transition-colors focus:border-foreground"
-            />
-          </div>
-          <div>
-            <label className="eyebrow mb-2 block text-muted-foreground">Story</label>
-            <textarea
-              name="story"
-              rows={6}
-              defaultValue={initialData?.story}
               className="w-full border border-border/40 bg-card p-3 text-sm outline-none transition-colors focus:border-foreground"
             />
           </div>
         </div>
 
+        {/* Right — Pricing, Inventory & Media */}
         <div className="space-y-6">
           <h2 className="eyebrow text-muted-foreground">Pricing & Inventory</h2>
           <div className="grid gap-6 grid-cols-2">
@@ -152,52 +135,47 @@ export function ProductForm({ initialData, isEdit }: ProductFormProps) {
           </div>
           <div className="grid gap-6 grid-cols-2">
             <Field label="Index (e.g. 01)" name="index" defaultValue={initialData?.index} />
-            <div>
-              <label className="eyebrow mb-2 block text-muted-foreground">Status</label>
-              <select name="active" defaultValue={initialData?.active === false ? "false" : "true"} className="w-full border-b border-foreground/30 bg-transparent py-3 text-base outline-none transition-colors focus:border-foreground">
-                <option value="true">Active</option>
-                <option value="false">Draft</option>
-              </select>
-            </div>
+            <Field label="Size (e.g. 50ml)" name="size" defaultValue={initialData?.size || "50ml"} />
           </div>
-          
-          <h2 className="eyebrow text-muted-foreground pt-6">Media</h2>
           <div>
-            <label className="eyebrow mb-2 block text-muted-foreground">Product Image (R2)</label>
-            <div className="flex items-center gap-4">
-              {currentImageUrl && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={currentImageUrl} alt="Preview" className="h-16 w-12 object-cover rounded-sm bg-muted" />
-              )}
-              <div className="flex-1">
-                <input
-                  type="file"
-                  accept="image/png, image/jpeg, image/webp"
-                  onChange={handleImageUpload}
-                  disabled={uploadingImage}
-                  className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:bg-foreground file:text-background hover:file:bg-accent transition-colors disabled:opacity-50"
-                />
-                {uploadingImage && <div className="text-xs text-muted-foreground mt-2">Uploading to R2...</div>}
-              </div>
-            </div>
-            {/* Fallback hidden input so it still submits if we want to manually edit, though we use state instead */}
-            <input type="hidden" name="imageUrl" value={currentImageUrl} />
+            <label className="eyebrow mb-2 block text-muted-foreground">Status</label>
+            <select
+              name="active"
+              defaultValue={initialData?.active === false ? "false" : "true"}
+              className="w-full border-b border-foreground/30 bg-transparent py-3 text-base outline-none transition-colors focus:border-foreground"
+            >
+              <option value="true">Active</option>
+              <option value="false">Draft</option>
+            </select>
           </div>
-          <Field label="Brand Hue (Hex)" name="hue" defaultValue={initialData?.hue} />
+
+          <h2 className="eyebrow text-muted-foreground pt-4">Product Image</h2>
+          <div className="flex items-center gap-4">
+            {currentImageUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={currentImageUrl} alt="Preview" className="h-16 w-12 object-cover rounded-sm bg-muted" />
+            )}
+            <div className="flex-1">
+              <input
+                type="file"
+                accept="image/png, image/jpeg, image/webp"
+                onChange={handleImageUpload}
+                disabled={uploadingImage}
+                className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:bg-foreground file:text-background hover:file:bg-accent transition-colors disabled:opacity-50"
+              />
+              {uploadingImage && (
+                <div className="text-xs text-muted-foreground mt-2">Uploading to R2...</div>
+              )}
+            </div>
+          </div>
+          <input type="hidden" name="imageUrl" value={currentImageUrl} />
         </div>
       </div>
 
-      <div className="border-t border-border/40 pt-10 grid gap-10 md:grid-cols-2">
-        <div className="space-y-6">
-          <h2 className="eyebrow text-muted-foreground">Scent Profile</h2>
-          <Field label="Scent Family" name="scentFamily" defaultValue={initialData?.scentFamily} />
-          <div className="grid gap-6 grid-cols-2">
-            <Field label="Concentration" name="concentration" defaultValue={initialData?.concentration || "EDP"} />
-            <Field label="Size" name="size" defaultValue={initialData?.size || "50ml"} />
-          </div>
-        </div>
-        <div className="space-y-6">
-          <h2 className="eyebrow text-muted-foreground">Scent Notes (comma separated)</h2>
+      {/* Scent Notes */}
+      <div className="border-t border-border/40 pt-10">
+        <h2 className="eyebrow text-muted-foreground mb-6">Scent Notes <span className="text-foreground/30 normal-case font-normal">(comma separated)</span></h2>
+        <div className="grid gap-6 md:grid-cols-3">
           <Field label="Top Notes" name="notesTop" defaultValue={initialNotes.top} />
           <Field label="Heart Notes" name="notesHeart" defaultValue={initialNotes.heart} />
           <Field label="Base Notes" name="notesBase" defaultValue={initialNotes.base} />

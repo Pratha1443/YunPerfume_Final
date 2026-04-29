@@ -121,7 +121,6 @@ export default function ProductPage({ params }: PageProps) {
           {/* Product info */}
           <div className="md:py-8">
             <div className="product-fade">
-              <div className="eyebrow text-accent">{product.scentFamily}</div>
               <h1 className="h-display mt-3 text-6xl font-light md:text-7xl lg:text-8xl">
                 {product.name}
               </h1>
@@ -131,7 +130,7 @@ export default function ProductPage({ params }: PageProps) {
             </div>
 
             <div className="mt-10 product-fade">
-              <p className="leading-relaxed text-foreground/70 text-lg max-w-lg">{product.story}</p>
+              <p className="leading-relaxed text-foreground/70 text-lg max-w-lg">{product.description}</p>
             </div>
 
             <div className="mt-12 hairline product-fade" />
@@ -231,10 +230,9 @@ export default function ProductPage({ params }: PageProps) {
                   <div className="mt-6 flex items-end justify-between">
                     <div>
                       <div className="font-display text-3xl font-light">{o.name}</div>
-                      <div className="eyebrow mt-2 text-foreground/40">{o.scentFamily}</div>
-                    </div>
-                    <div className="font-mono text-[11px] text-foreground/60">
-                      {o.price ? formatINR(o.price / 100) : ""}
+                      <div className="font-mono text-[11px] text-foreground/60 mt-2">
+                        {o.price ? formatINR(o.price / 100) : ""}
+                      </div>
                     </div>
                   </div>
                 </Link>
