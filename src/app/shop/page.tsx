@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { getDb, products } from '@/db';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { formatINR } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default async function ShopPage() {
   const fragrances = await db
     .select()
     .from(products)
-    .where(and(eq(products.active, true), eq(products.isDiscoverySet, false)))
+    .where(eq(products.active, true))
     .orderBy(products.index)
     .all();
 
