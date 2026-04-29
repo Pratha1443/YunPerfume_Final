@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     }
 
     const { env } = getRequestContext();
-    const bucket = env.R2 as R2Bucket; // defined in bindings
+    const bucket = env.IMAGES;
 
     if (!bucket) {
       return NextResponse.json({ error: 'R2 Bucket not bound' }, { status: 500 });
